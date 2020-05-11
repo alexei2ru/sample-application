@@ -1,0 +1,299 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: task-template
+parameters:
+  - name: DB_USER
+    displayName: The database user 
+    description: user name of the database 
+    value: dbuser 
+    required: true 
+  - name: DB_PASSWORD
+    description: The database password
+    required: true 
+  - name: DB_SERVER
+    description: name of the database server
+    value: "task-db"
+    required: true
+message: "... Happy Coding (Do not use in production :) ) ..."
+objects:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: task
+    name: task
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: task
+      deploymentconfig: task
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
+    labels:
+      app: postgresql-persistent
+      template: postgresql-persistent-template
+    name: task-db
+  spec:
+    ports:
+    - name: postgresql
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+    selector:
+      name: task-db
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      app: task
+    name: task
+    namespace: bootcamp
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      app: task
+      deploymentconfig: task
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        labels:
+          app: task
+          deploymentconfig: task
+      spec:
+        containers:
+        - env:
+          - name: DB_SERVER
+            value: ${DB_SERVER}
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-password
+                name: task-db
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: task-db
+          image: 172.30.1.1:5000/openshift/task@sha256:4530e154500d617f2485210630444db4a295a41d004fade8fbe123f6a5ae0291
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: task
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 4
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - task
+        from:
+          kind: ImageStreamTag
+          name: task:latest
+          namespace: openshift
+        lastTriggeredImage: 172.30.1.1:5000/openshift/task@sha256:4530e154500d617f2485210630444db4a295a41d004fade8fbe123f6a5ae0291
+      type: ImageChange
+    readyReplicas: 1
+    replicas: 1
+    unavailableReplicas: 0
+    updatedReplicas: 1
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      template.alpha.openshift.io/wait-for-ready: "true"
+    labels:
+      app: postgresql-persistent
+      template: postgresql-persistent-template
+    name: task-db
+    namespace: bootcamp
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      name: task-db
+    strategy:
+      activeDeadlineSeconds: 21600
+      recreateParams:
+        timeoutSeconds: 600
+      resources: {}
+      type: Recreate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          name: task-db
+      spec:
+        containers:
+        - env:
+          - name: POSTGRESQL_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: task-db
+          - name: POSTGRESQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-password
+                name: task-db
+          - name: POSTGRESQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                key: database-name
+                name: task-db
+          image: 172.30.1.1:5000/openshift/postgresql@sha256:486c4115b9191ba6c6ab7a00b7203adcdb3eab4f1cc8644249f2789af6e7f1fa
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+              - /usr/libexec/check-container
+              - --live
+            failureThreshold: 3
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          name: postgresql
+          ports:
+          - containerPort: 5432
+            protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+              - /usr/libexec/check-container
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              memory: 512Mi
+          securityContext:
+            capabilities: {}
+            privileged: false
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/lib/pgsql/data
+            name: task-db-data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: task-db-data
+          persistentVolumeClaim:
+            claimName: task-db
+    test: false
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - postgresql
+        from:
+          kind: ImageStreamTag
+          name: postgresql:9.6
+          namespace: openshift
+        lastTriggeredImage: 172.30.1.1:5000/openshift/postgresql@sha256:486c4115b9191ba6c6ab7a00b7203adcdb3eab4f1cc8644249f2789af6e7f1fa
+      type: ImageChange
+    - type: ConfigChange
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/image.dockerRepositoryCheck: 2019-09-20T06:02:13Z
+    name: task
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: 172.30.1.1:5000/openshift/task:latest
+      generation: 2
+      importPolicy: {}
+      name: latest
+      referencePolicy:
+        type: Source
+- apiVersion: v1
+  stringData:
+    database-name: tasks
+    database-password: ${DB_PASSWORD}
+    database-user: ${DB_USER}
+  kind: Secret
+  metadata:
+    annotations:
+      template.openshift.io/expose-database_name: '{.data[''database-name'']}'
+      template.openshift.io/expose-password: '{.data[''database-password'']}'
+      template.openshift.io/expose-username: '{.data[''database-user'']}'
+    labels:
+      app: postgresql-persistent
+      template: postgresql-persistent-template
+    name: task-db
+  type: Opaque
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: "task-db"
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: "1Gi"

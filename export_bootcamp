@@ -1,0 +1,2879 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      openshift.io/deployment-config.latest-version: "1"
+      openshift.io/deployment-config.name: jenkins
+      openshift.io/deployment.name: jenkins-1
+      openshift.io/generated-by: OpenShiftNewApp
+      openshift.io/scc: restricted
+    creationTimestamp: 2019-10-09T11:41:30Z
+    generateName: jenkins-1-
+    labels:
+      deployment: jenkins-1
+      deploymentconfig: jenkins
+      name: jenkins
+    name: jenkins-1-g9xxw
+    namespace: bootcamp
+    ownerReferences:
+    - apiVersion: v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicationController
+      name: jenkins-1
+      uid: bad0bb4b-ea89-11e9-8600-0800276cf440
+    resourceVersion: "933876"
+    selfLink: /api/v1/namespaces/bootcamp/pods/jenkins-1-g9xxw
+    uid: bc9ee793-ea89-11e9-8600-0800276cf440
+  spec:
+    containers:
+    - env:
+      - name: OPENSHIFT_ENABLE_OAUTH
+        value: "true"
+      - name: OPENSHIFT_ENABLE_REDIRECT_PROMPT
+        value: "true"
+      - name: DISABLE_ADMINISTRATIVE_MONITORS
+        value: "false"
+      - name: KUBERNETES_MASTER
+        value: https://kubernetes.default:443
+      - name: KUBERNETES_TRUST_CERTIFICATES
+        value: "true"
+      - name: JENKINS_SERVICE_NAME
+        value: jenkins
+      - name: JNLP_SERVICE_NAME
+        value: jenkins-jnlp
+      image: 172.30.1.1:5000/openshift/jenkins@sha256:e2a97ac20f680314f6ea221d33aafa663dbfde1a9cadfe184f22f52abebabb1e
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        failureThreshold: 2
+        httpGet:
+          path: /login
+          port: 8080
+          scheme: HTTP
+        initialDelaySeconds: 420
+        periodSeconds: 360
+        successThreshold: 1
+        timeoutSeconds: 240
+      name: jenkins
+      readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /login
+          port: 8080
+          scheme: HTTP
+        initialDelaySeconds: 3
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 240
+      resources:
+        limits:
+          memory: 512Mi
+        requests:
+          memory: 512Mi
+      securityContext:
+        capabilities:
+          drop:
+          - KILL
+          - MKNOD
+          - SETGID
+          - SETUID
+        privileged: false
+        runAsUser: 1000150000
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/lib/jenkins
+        name: jenkins-data
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: jenkins-token-6v7hz
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    imagePullSecrets:
+    - name: jenkins-dockercfg-nw9qk
+    nodeName: localhost
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      fsGroup: 1000150000
+      seLinuxOptions:
+        level: s0:c12,c9
+    serviceAccount: jenkins
+    serviceAccountName: jenkins
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoSchedule
+      key: node.kubernetes.io/memory-pressure
+      operator: Exists
+    volumes:
+    - emptyDir: {}
+      name: jenkins-data
+    - name: jenkins-token-6v7hz
+      secret:
+        defaultMode: 420
+        secretName: jenkins-token-6v7hz
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: 2019-10-09T11:41:30Z
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: 2019-10-09T11:48:21Z
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: null
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: 2019-10-09T11:41:30Z
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://c0aad9e3158b6d6f38567db483d2b96526b8cdbd94be5859367749b57ef72a6d
+      image: 172.30.1.1:5000/openshift/jenkins@sha256:e2a97ac20f680314f6ea221d33aafa663dbfde1a9cadfe184f22f52abebabb1e
+      imageID: docker-pullable://172.30.1.1:5000/openshift/jenkins@sha256:e2a97ac20f680314f6ea221d33aafa663dbfde1a9cadfe184f22f52abebabb1e
+      lastState: {}
+      name: jenkins
+      ready: true
+      restartCount: 0
+      state:
+        running:
+          startedAt: 2019-10-09T11:46:07Z
+    hostIP: 10.0.2.15
+    phase: Running
+    podIP: 172.17.0.13
+    qosClass: Burstable
+    startTime: 2019-10-09T11:41:30Z
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      openshift.io/build.name: mywebserver-1
+      openshift.io/scc: privileged
+    creationTimestamp: 2019-10-09T10:01:06Z
+    labels:
+      openshift.io/build.name: mywebserver-1
+    name: mywebserver-1-build
+    namespace: bootcamp
+    ownerReferences:
+    - apiVersion: build.openshift.io/v1
+      controller: true
+      kind: Build
+      name: mywebserver-1
+      uid: b5f09d53-ea7b-11e9-a2b9-0800276cf440
+    resourceVersion: "907877"
+    selfLink: /api/v1/namespaces/bootcamp/pods/mywebserver-1-build
+    uid: b61c3fbc-ea7b-11e9-8600-0800276cf440
+  spec:
+    containers:
+    - args:
+      - --loglevel=0
+      command:
+      - openshift-sti-build
+      env:
+      - name: BUILD
+        value: |
+          {"kind":"Build","apiVersion":"build.openshift.io/v1","metadata":{"name":"mywebserver-1","namespace":"bootcamp","selfLink":"/apis/build.openshift.io/v1/namespaces/bootcamp/builds/mywebserver-1","uid":"b5f09d53-ea7b-11e9-a2b9-0800276cf440","resourceVersion":"907609","creationTimestamp":"2019-10-09T10:01:06Z","labels":{"app":"mywebserver","buildconfig":"mywebserver","openshift.io/build-config.name":"mywebserver","openshift.io/build.start-policy":"Serial"},"annotations":{"openshift.io/build-config.name":"mywebserver","openshift.io/build.number":"1"},"ownerReferences":[{"apiVersion":"build.openshift.io/v1","kind":"BuildConfig","name":"mywebserver","uid":"b5531692-ea7b-11e9-a2b9-0800276cf440","controller":true}]},"spec":{"serviceAccount":"builder","source":{"type":"Git","git":{"uri":"https://github.com/sclorg/nginx-ex.git","ref":"master"}},"strategy":{"type":"Source","sourceStrategy":{"from":{"kind":"DockerImage","name":"172.30.1.1:5000/openshift/nginx@sha256:1f2438f8879527f541b97fc2451fe50bcb7c810aab096aeeb2f444a3858869ca"},"pullSecret":{"name":"builder-dockercfg-k7rkv"}}},"output":{"to":{"kind":"DockerImage","name":"172.30.1.1:5000/bootcamp/mywebserver:latest"},"pushSecret":{"name":"builder-dockercfg-k7rkv"}},"resources":{},"postCommit":{},"nodeSelector":null,"triggeredBy":[{"message":"Build configuration change"}]},"status":{"phase":"New","outputDockerImageReference":"172.30.1.1:5000/bootcamp/mywebserver:latest","config":{"kind":"BuildConfig","namespace":"bootcamp","name":"mywebserver"},"output":{}}}
+      - name: SOURCE_REPOSITORY
+        value: https://github.com/sclorg/nginx-ex.git
+      - name: SOURCE_URI
+        value: https://github.com/sclorg/nginx-ex.git
+      - name: SOURCE_REF
+        value: master
+      - name: ALLOWED_UIDS
+        value: 1-
+      - name: DROP_CAPS
+        value: KILL,MKNOD,SETGID,SETUID
+      - name: PUSH_DOCKERCFG_PATH
+        value: /var/run/secrets/openshift.io/push
+      - name: PULL_DOCKERCFG_PATH
+        value: /var/run/secrets/openshift.io/pull
+      image: openshift/origin-docker-builder:v3.11.0
+      imagePullPolicy: IfNotPresent
+      name: sti-build
+      resources: {}
+      securityContext:
+        privileged: true
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: FallbackToLogsOnError
+      volumeMounts:
+      - mountPath: /tmp/build
+        name: buildworkdir
+      - mountPath: /var/run/docker.sock
+        name: docker-socket
+      - mountPath: /var/run/crio/crio.sock
+        name: crio-socket
+      - mountPath: /var/run/secrets/openshift.io/push
+        name: builder-dockercfg-k7rkv-push
+        readOnly: true
+      - mountPath: /var/run/secrets/openshift.io/pull
+        name: builder-dockercfg-k7rkv-pull
+        readOnly: true
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: builder-token-rfxrk
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    imagePullSecrets:
+    - name: builder-dockercfg-k7rkv
+    initContainers:
+    - args:
+      - --loglevel=0
+      command:
+      - openshift-git-clone
+      env:
+      - name: BUILD
+        value: |
+          {"kind":"Build","apiVersion":"build.openshift.io/v1","metadata":{"name":"mywebserver-1","namespace":"bootcamp","selfLink":"/apis/build.openshift.io/v1/namespaces/bootcamp/builds/mywebserver-1","uid":"b5f09d53-ea7b-11e9-a2b9-0800276cf440","resourceVersion":"907609","creationTimestamp":"2019-10-09T10:01:06Z","labels":{"app":"mywebserver","buildconfig":"mywebserver","openshift.io/build-config.name":"mywebserver","openshift.io/build.start-policy":"Serial"},"annotations":{"openshift.io/build-config.name":"mywebserver","openshift.io/build.number":"1"},"ownerReferences":[{"apiVersion":"build.openshift.io/v1","kind":"BuildConfig","name":"mywebserver","uid":"b5531692-ea7b-11e9-a2b9-0800276cf440","controller":true}]},"spec":{"serviceAccount":"builder","source":{"type":"Git","git":{"uri":"https://github.com/sclorg/nginx-ex.git","ref":"master"}},"strategy":{"type":"Source","sourceStrategy":{"from":{"kind":"DockerImage","name":"172.30.1.1:5000/openshift/nginx@sha256:1f2438f8879527f541b97fc2451fe50bcb7c810aab096aeeb2f444a3858869ca"},"pullSecret":{"name":"builder-dockercfg-k7rkv"}}},"output":{"to":{"kind":"DockerImage","name":"172.30.1.1:5000/bootcamp/mywebserver:latest"},"pushSecret":{"name":"builder-dockercfg-k7rkv"}},"resources":{},"postCommit":{},"nodeSelector":null,"triggeredBy":[{"message":"Build configuration change"}]},"status":{"phase":"New","outputDockerImageReference":"172.30.1.1:5000/bootcamp/mywebserver:latest","config":{"kind":"BuildConfig","namespace":"bootcamp","name":"mywebserver"},"output":{}}}
+      - name: SOURCE_REPOSITORY
+        value: https://github.com/sclorg/nginx-ex.git
+      - name: SOURCE_URI
+        value: https://github.com/sclorg/nginx-ex.git
+      - name: SOURCE_REF
+        value: master
+      - name: ALLOWED_UIDS
+        value: 1-
+      - name: DROP_CAPS
+        value: KILL,MKNOD,SETGID,SETUID
+      image: openshift/origin-docker-builder:v3.11.0
+      imagePullPolicy: IfNotPresent
+      name: git-clone
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: FallbackToLogsOnError
+      volumeMounts:
+      - mountPath: /tmp/build
+        name: buildworkdir
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: builder-token-rfxrk
+        readOnly: true
+    - args:
+      - --loglevel=0
+      command:
+      - openshift-manage-dockerfile
+      env:
+      - name: BUILD
+        value: |
+          {"kind":"Build","apiVersion":"build.openshift.io/v1","metadata":{"name":"mywebserver-1","namespace":"bootcamp","selfLink":"/apis/build.openshift.io/v1/namespaces/bootcamp/builds/mywebserver-1","uid":"b5f09d53-ea7b-11e9-a2b9-0800276cf440","resourceVersion":"907609","creationTimestamp":"2019-10-09T10:01:06Z","labels":{"app":"mywebserver","buildconfig":"mywebserver","openshift.io/build-config.name":"mywebserver","openshift.io/build.start-policy":"Serial"},"annotations":{"openshift.io/build-config.name":"mywebserver","openshift.io/build.number":"1"},"ownerReferences":[{"apiVersion":"build.openshift.io/v1","kind":"BuildConfig","name":"mywebserver","uid":"b5531692-ea7b-11e9-a2b9-0800276cf440","controller":true}]},"spec":{"serviceAccount":"builder","source":{"type":"Git","git":{"uri":"https://github.com/sclorg/nginx-ex.git","ref":"master"}},"strategy":{"type":"Source","sourceStrategy":{"from":{"kind":"DockerImage","name":"172.30.1.1:5000/openshift/nginx@sha256:1f2438f8879527f541b97fc2451fe50bcb7c810aab096aeeb2f444a3858869ca"},"pullSecret":{"name":"builder-dockercfg-k7rkv"}}},"output":{"to":{"kind":"DockerImage","name":"172.30.1.1:5000/bootcamp/mywebserver:latest"},"pushSecret":{"name":"builder-dockercfg-k7rkv"}},"resources":{},"postCommit":{},"nodeSelector":null,"triggeredBy":[{"message":"Build configuration change"}]},"status":{"phase":"New","outputDockerImageReference":"172.30.1.1:5000/bootcamp/mywebserver:latest","config":{"kind":"BuildConfig","namespace":"bootcamp","name":"mywebserver"},"output":{}}}
+      - name: SOURCE_REPOSITORY
+        value: https://github.com/sclorg/nginx-ex.git
+      - name: SOURCE_URI
+        value: https://github.com/sclorg/nginx-ex.git
+      - name: SOURCE_REF
+        value: master
+      - name: ALLOWED_UIDS
+        value: 1-
+      - name: DROP_CAPS
+        value: KILL,MKNOD,SETGID,SETUID
+      image: openshift/origin-docker-builder:v3.11.0
+      imagePullPolicy: IfNotPresent
+      name: manage-dockerfile
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: FallbackToLogsOnError
+      volumeMounts:
+      - mountPath: /tmp/build
+        name: buildworkdir
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: builder-token-rfxrk
+        readOnly: true
+    nodeName: localhost
+    priority: 0
+    restartPolicy: Never
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: builder
+    serviceAccountName: builder
+    terminationGracePeriodSeconds: 30
+    volumes:
+    - emptyDir: {}
+      name: buildworkdir
+    - hostPath:
+        path: /var/run/docker.sock
+        type: ""
+      name: docker-socket
+    - hostPath:
+        path: /var/run/crio/crio.sock
+        type: ""
+      name: crio-socket
+    - name: builder-dockercfg-k7rkv-push
+      secret:
+        defaultMode: 384
+        secretName: builder-dockercfg-k7rkv
+    - name: builder-dockercfg-k7rkv-pull
+      secret:
+        defaultMode: 384
+        secretName: builder-dockercfg-k7rkv
+    - name: builder-token-rfxrk
+      secret:
+        defaultMode: 420
+        secretName: builder-token-rfxrk
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: 2019-10-09T10:01:23Z
+      reason: PodCompleted
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: 2019-10-09T10:02:02Z
+      reason: PodCompleted
+      status: "False"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: null
+      reason: PodCompleted
+      status: "False"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: 2019-10-09T10:01:06Z
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://ddc061b310c39f37c019848f4652d43f4d49b3174b63d47a6c7e94af76ee5a30
+      image: docker.io/openshift/origin-docker-builder:v3.11.0
+      imageID: docker-pullable://docker.io/openshift/origin-docker-builder@sha256:53e61fe0df56ec4f61b14e134c13e1ecc1dd3b3d1fb83f6fa2b359c1d9a18a09
+      lastState: {}
+      name: sti-build
+      ready: false
+      restartCount: 0
+      state:
+        terminated:
+          containerID: docker://ddc061b310c39f37c019848f4652d43f4d49b3174b63d47a6c7e94af76ee5a30
+          exitCode: 0
+          finishedAt: 2019-10-09T10:02:01Z
+          reason: Completed
+          startedAt: 2019-10-09T10:01:23Z
+    hostIP: 10.0.2.15
+    initContainerStatuses:
+    - containerID: docker://afdddac1463dd825025d5ae058073a0f4ebf8b26146455a2c4961814b5de0317
+      image: docker.io/openshift/origin-docker-builder:v3.11.0
+      imageID: docker-pullable://docker.io/openshift/origin-docker-builder@sha256:53e61fe0df56ec4f61b14e134c13e1ecc1dd3b3d1fb83f6fa2b359c1d9a18a09
+      lastState: {}
+      name: git-clone
+      ready: true
+      restartCount: 0
+      state:
+        terminated:
+          containerID: docker://afdddac1463dd825025d5ae058073a0f4ebf8b26146455a2c4961814b5de0317
+          exitCode: 0
+          finishedAt: 2019-10-09T10:01:22Z
+          reason: Completed
+          startedAt: 2019-10-09T10:01:18Z
+    - containerID: docker://f9a393061441a941ee9487c06ac53a0447747430d236a03a9eaf8f09a9fd714c
+      image: docker.io/openshift/origin-docker-builder:v3.11.0
+      imageID: docker-pullable://docker.io/openshift/origin-docker-builder@sha256:53e61fe0df56ec4f61b14e134c13e1ecc1dd3b3d1fb83f6fa2b359c1d9a18a09
+      lastState: {}
+      name: manage-dockerfile
+      ready: true
+      restartCount: 0
+      state:
+        terminated:
+          containerID: docker://f9a393061441a941ee9487c06ac53a0447747430d236a03a9eaf8f09a9fd714c
+          exitCode: 0
+          finishedAt: 2019-10-09T10:01:23Z
+          reason: Completed
+          startedAt: 2019-10-09T10:01:22Z
+    phase: Succeeded
+    podIP: 172.17.0.11
+    qosClass: BestEffort
+    startTime: 2019-10-09T10:01:07Z
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      openshift.io/deployment-config.latest-version: "3"
+      openshift.io/deployment-config.name: mywebserver
+      openshift.io/deployment.name: mywebserver-3
+      openshift.io/scc: restricted
+    creationTimestamp: 2019-10-09T11:38:52Z
+    generateName: mywebserver-3-
+    labels:
+      app: mywebserver
+      deployment: mywebserver-3
+      deploymentconfig: mywebserver
+    name: mywebserver-3-qs4c7
+    namespace: bootcamp
+    ownerReferences:
+    - apiVersion: v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicationController
+      name: mywebserver-3
+      uid: 5b17217a-ea89-11e9-8600-0800276cf440
+    resourceVersion: "931539"
+    selfLink: /api/v1/namespaces/bootcamp/pods/mywebserver-3-qs4c7
+    uid: 5e587780-ea89-11e9-8600-0800276cf440
+  spec:
+    containers:
+    - image: 172.30.1.1:5000/bootcamp/mywebserver@sha256:469872e623080d01e33b73af9075c356ed0d4800a525ea608ae60c053e5964e1
+      imagePullPolicy: Always
+      livenessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /index.html
+          port: 8080
+          scheme: HTTP
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      name: mywebserver
+      ports:
+      - containerPort: 8080
+        protocol: TCP
+      - containerPort: 8443
+        protocol: TCP
+      readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /index.html
+          port: 8080
+          scheme: HTTP
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      resources: {}
+      securityContext:
+        capabilities:
+          drop:
+          - KILL
+          - MKNOD
+          - SETGID
+          - SETUID
+        runAsUser: 1000150000
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: default-token-nj7x4
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    imagePullSecrets:
+    - name: default-dockercfg-hl86p
+    nodeName: localhost
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      fsGroup: 1000150000
+      seLinuxOptions:
+        level: s0:c12,c9
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    volumes:
+    - name: default-token-nj7x4
+      secret:
+        defaultMode: 420
+        secretName: default-token-nj7x4
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: 2019-10-09T11:38:52Z
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: 2019-10-09T11:38:57Z
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: null
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: 2019-10-09T11:38:52Z
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://b3e1ade9bbe43d7690d8486af8aa2625aa3bfc8def686a384a2f5c0d4e0c350c
+      image: 172.30.1.1:5000/bootcamp/mywebserver:latest
+      imageID: docker-pullable://172.30.1.1:5000/bootcamp/mywebserver@sha256:469872e623080d01e33b73af9075c356ed0d4800a525ea608ae60c053e5964e1
+      lastState: {}
+      name: mywebserver
+      ready: true
+      restartCount: 0
+      state:
+        running:
+          startedAt: 2019-10-09T11:38:54Z
+    hostIP: 10.0.2.15
+    phase: Running
+    podIP: 172.17.0.14
+    qosClass: BestEffort
+    startTime: 2019-10-09T11:38:52Z
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      openshift.io/deployment-config.latest-version: "8"
+      openshift.io/deployment-config.name: task
+      openshift.io/deployment.name: task-8
+      openshift.io/generated-by: OpenShiftNewApp
+      openshift.io/scc: restricted
+    creationTimestamp: 2019-10-09T13:01:29Z
+    generateName: task-8-
+    labels:
+      app: task
+      deployment: task-8
+      deploymentconfig: task
+    name: task-8-9rcc7
+    namespace: bootcamp
+    ownerReferences:
+    - apiVersion: v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicationController
+      name: task-8
+      uid: e4c7173a-ea94-11e9-8600-0800276cf440
+    resourceVersion: "952326"
+    selfLink: /api/v1/namespaces/bootcamp/pods/task-8-9rcc7
+    uid: e91a64e9-ea94-11e9-8600-0800276cf440
+  spec:
+    containers:
+    - env:
+      - name: DB_USER
+        valueFrom:
+          secretKeyRef:
+            key: database-user
+            name: task-db
+      - name: DB_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            key: database-password
+            name: task-db
+      - name: DB_SERVER
+        value: task-db
+      image: 172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13
+      imagePullPolicy: Always
+      livenessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /data/hello
+          port: 8080
+          scheme: HTTP
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 3
+      name: task
+      ports:
+      - containerPort: 8080
+        protocol: TCP
+      - containerPort: 9009
+        protocol: TCP
+      readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /data/hello
+          port: 8080
+          scheme: HTTP
+        initialDelaySeconds: 30
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 3
+      resources: {}
+      securityContext:
+        capabilities:
+          drop:
+          - KILL
+          - MKNOD
+          - SETGID
+          - SETUID
+        runAsUser: 1000150000
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: default-token-nj7x4
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    imagePullSecrets:
+    - name: default-dockercfg-hl86p
+    nodeName: localhost
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      fsGroup: 1000150000
+      seLinuxOptions:
+        level: s0:c12,c9
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    volumes:
+    - name: default-token-nj7x4
+      secret:
+        defaultMode: 420
+        secretName: default-token-nj7x4
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: 2019-10-09T13:01:30Z
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: 2019-10-09T13:03:19Z
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: null
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: 2019-10-09T13:01:30Z
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://444cb907f886f06f39bf704196f4936df1d1e8e6908e383ca604ec3ba8be7155
+      image: 172.30.1.1:5000/bootcamp/task:latest
+      imageID: docker-pullable://172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13
+      lastState:
+        terminated:
+          containerID: docker://a74e2cd65bb1b04150811932e6a019635b62e6caf1e6284fec1ef2aae22ab506
+          exitCode: 143
+          finishedAt: 2019-10-09T13:02:28Z
+          reason: Error
+          startedAt: 2019-10-09T13:01:34Z
+      name: task
+      ready: true
+      restartCount: 1
+      state:
+        running:
+          startedAt: 2019-10-09T13:02:30Z
+    hostIP: 10.0.2.15
+    phase: Running
+    podIP: 172.17.0.15
+    qosClass: BestEffort
+    startTime: 2019-10-09T13:01:30Z
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      openshift.io/deployment-config.latest-version: "1"
+      openshift.io/deployment-config.name: task-db
+      openshift.io/deployment.name: task-db-1
+      openshift.io/scc: restricted
+    creationTimestamp: 2019-10-09T12:52:08Z
+    generateName: task-db-1-
+    labels:
+      deployment: task-db-1
+      deploymentconfig: task-db
+      name: task-db
+    name: task-db-1-g48ng
+    namespace: bootcamp
+    ownerReferences:
+    - apiVersion: v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicationController
+      name: task-db-1
+      uid: 1e1951ae-ea82-11e9-8600-0800276cf440
+    resourceVersion: "949691"
+    selfLink: /api/v1/namespaces/bootcamp/pods/task-db-1-g48ng
+    uid: 9a4895ae-ea93-11e9-8600-0800276cf440
+  spec:
+    containers:
+    - env:
+      - name: POSTGRESQL_USER
+        valueFrom:
+          secretKeyRef:
+            key: database-user
+            name: task-db
+      - name: POSTGRESQL_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            key: database-password
+            name: task-db
+      - name: POSTGRESQL_DATABASE
+        valueFrom:
+          secretKeyRef:
+            key: database-name
+            name: task-db
+      image: 172.30.1.1:5000/openshift/postgresql@sha256:539f3b22082290601cb2d13c3a288d126554a9f3898008dae18af68f4d2cce90
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        exec:
+          command:
+          - /usr/libexec/check-container
+          - --live
+        failureThreshold: 3
+        initialDelaySeconds: 120
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 10
+      name: postgresql
+      ports:
+      - containerPort: 5432
+        protocol: TCP
+      readinessProbe:
+        exec:
+          command:
+          - /usr/libexec/check-container
+        failureThreshold: 3
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      resources:
+        limits:
+          memory: 512Mi
+        requests:
+          memory: 512Mi
+      securityContext:
+        capabilities:
+          drop:
+          - KILL
+          - MKNOD
+          - SETGID
+          - SETUID
+        privileged: false
+        runAsUser: 1000150000
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/lib/pgsql/data
+        name: task-db-data
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: default-token-nj7x4
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    imagePullSecrets:
+    - name: default-dockercfg-hl86p
+    nodeName: localhost
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      fsGroup: 1000150000
+      seLinuxOptions:
+        level: s0:c12,c9
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoSchedule
+      key: node.kubernetes.io/memory-pressure
+      operator: Exists
+    volumes:
+    - name: task-db-data
+      persistentVolumeClaim:
+        claimName: task-db
+    - name: default-token-nj7x4
+      secret:
+        defaultMode: 420
+        secretName: default-token-nj7x4
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: 2019-10-09T12:52:08Z
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: 2019-10-09T12:52:59Z
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: null
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: 2019-10-09T12:52:08Z
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://3529f13558883d583c4ad9d3181f9d72d8ebcc9adb23617652da4a637525597a
+      image: sha256:7691dca21c76e9e0244e636e1e45329138fe47af63533414f2679d4df649e1dd
+      imageID: docker-pullable://172.30.1.1:5000/openshift/postgresql@sha256:539f3b22082290601cb2d13c3a288d126554a9f3898008dae18af68f4d2cce90
+      lastState: {}
+      name: postgresql
+      ready: true
+      restartCount: 0
+      state:
+        running:
+          startedAt: 2019-10-09T12:52:12Z
+    hostIP: 10.0.2.15
+    phase: Running
+    podIP: 172.17.0.11
+    qosClass: Burstable
+    startTime: 2019-10-09T12:52:08Z
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    annotations:
+      openshift.io/deployer-pod.completed-at: 2019-10-09 11:48:22 +0000 UTC
+      openshift.io/deployer-pod.created-at: 2019-10-09 11:41:28 +0000 UTC
+      openshift.io/deployer-pod.name: jenkins-1-deploy
+      openshift.io/deployment-config.latest-version: "1"
+      openshift.io/deployment-config.name: jenkins
+      openshift.io/deployment.phase: Complete
+      openshift.io/deployment.replicas: "1"
+      openshift.io/deployment.status-reason: config change
+      openshift.io/encoded-deployment-config: |
+        {"kind":"DeploymentConfig","apiVersion":"apps.openshift.io/v1","metadata":{"name":"jenkins","namespace":"bootcamp","selfLink":"/apis/apps.openshift.io/v1/namespaces/bootcamp/deploymentconfigs/jenkins","uid":"ba5c70af-ea89-11e9-a2b9-0800276cf440","resourceVersion":"932178","generation":2,"creationTimestamp":"2019-10-09T11:41:26Z","labels":{"app":"jenkins-ephemeral","template":"jenkins-ephemeral-template"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp","template.alpha.openshift.io/wait-for-ready":"true"}},"spec":{"strategy":{"type":"Recreate","recreateParams":{"timeoutSeconds":600},"resources":{},"activeDeadlineSeconds":21600},"triggers":[{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["jenkins"],"from":{"kind":"ImageStreamTag","namespace":"openshift","name":"jenkins:2"},"lastTriggeredImage":"172.30.1.1:5000/openshift/jenkins@sha256:e2a97ac20f680314f6ea221d33aafa663dbfde1a9cadfe184f22f52abebabb1e"}},{"type":"ConfigChange"}],"replicas":1,"revisionHistoryLimit":10,"test":false,"selector":{"name":"jenkins"},"template":{"metadata":{"creationTimestamp":null,"labels":{"name":"jenkins"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"volumes":[{"name":"jenkins-data","emptyDir":{}}],"containers":[{"name":"jenkins","image":"172.30.1.1:5000/openshift/jenkins@sha256:e2a97ac20f680314f6ea221d33aafa663dbfde1a9cadfe184f22f52abebabb1e","env":[{"name":"OPENSHIFT_ENABLE_OAUTH","value":"true"},{"name":"OPENSHIFT_ENABLE_REDIRECT_PROMPT","value":"true"},{"name":"DISABLE_ADMINISTRATIVE_MONITORS","value":"false"},{"name":"KUBERNETES_MASTER","value":"https://kubernetes.default:443"},{"name":"KUBERNETES_TRUST_CERTIFICATES","value":"true"},{"name":"JENKINS_SERVICE_NAME","value":"jenkins"},{"name":"JNLP_SERVICE_NAME","value":"jenkins-jnlp"}],"resources":{"limits":{"memory":"512Mi"}},"volumeMounts":[{"name":"jenkins-data","mountPath":"/var/lib/jenkins"}],"livenessProbe":{"httpGet":{"path":"/login","port":8080,"scheme":"HTTP"},"initialDelaySeconds":420,"timeoutSeconds":240,"periodSeconds":360,"successThreshold":1,"failureThreshold":2},"readinessProbe":{"httpGet":{"path":"/login","port":8080,"scheme":"HTTP"},"initialDelaySeconds":3,"timeoutSeconds":240,"periodSeconds":10,"successThreshold":1,"failureThreshold":3},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","imagePullPolicy":"IfNotPresent","securityContext":{"capabilities":{},"privileged":false}}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","serviceAccountName":"jenkins","serviceAccount":"jenkins","securityContext":{},"schedulerName":"default-scheduler"}}},"status":{"latestVersion":1,"observedGeneration":0,"replicas":0,"updatedReplicas":0,"availableReplicas":0,"unavailableReplicas":0,"details":{"message":"config change","causes":[{"type":"ConfigChange"}]}}}
+    creationTimestamp: 2019-10-09T11:41:27Z
+    generation: 2
+    labels:
+      app: jenkins-ephemeral
+      openshift.io/deployment-config.name: jenkins
+      template: jenkins-ephemeral-template
+    name: jenkins-1
+    namespace: bootcamp
+    ownerReferences:
+    - apiVersion: apps.openshift.io/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: DeploymentConfig
+      name: jenkins
+      uid: ba5c70af-ea89-11e9-a2b9-0800276cf440
+    resourceVersion: "933888"
+    selfLink: /api/v1/namespaces/bootcamp/replicationcontrollers/jenkins-1
+    uid: bad0bb4b-ea89-11e9-8600-0800276cf440
+  spec:
+    replicas: 1
+    selector:
+      deployment: jenkins-1
+      deploymentconfig: jenkins
+      name: jenkins
+    template:
+      metadata:
+        annotations:
+          openshift.io/deployment-config.latest-version: "1"
+          openshift.io/deployment-config.name: jenkins
+          openshift.io/deployment.name: jenkins-1
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          deployment: jenkins-1
+          deploymentconfig: jenkins
+          name: jenkins
+      spec:
+        containers:
+        - env:
+          - name: OPENSHIFT_ENABLE_OAUTH
+            value: "true"
+          - name: OPENSHIFT_ENABLE_REDIRECT_PROMPT
+            value: "true"
+          - name: DISABLE_ADMINISTRATIVE_MONITORS
+            value: "false"
+          - name: KUBERNETES_MASTER
+            value: https://kubernetes.default:443
+          - name: KUBERNETES_TRUST_CERTIFICATES
+            value: "true"
+          - name: JENKINS_SERVICE_NAME
+            value: jenkins
+          - name: JNLP_SERVICE_NAME
+            value: jenkins-jnlp
+          image: 172.30.1.1:5000/openshift/jenkins@sha256:e2a97ac20f680314f6ea221d33aafa663dbfde1a9cadfe184f22f52abebabb1e
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 2
+            httpGet:
+              path: /login
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 420
+            periodSeconds: 360
+            successThreshold: 1
+            timeoutSeconds: 240
+          name: jenkins
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /login
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 240
+          resources:
+            limits:
+              memory: 512Mi
+          securityContext:
+            capabilities: {}
+            privileged: false
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/lib/jenkins
+            name: jenkins-data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: jenkins
+        serviceAccountName: jenkins
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: jenkins-data
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 2
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/original-replicas: "1"
+      openshift.io/deployer-pod.completed-at: 2019-10-09 10:02:07 +0000 UTC
+      openshift.io/deployer-pod.created-at: 2019-10-09 10:02:02 +0000 UTC
+      openshift.io/deployer-pod.name: mywebserver-1-deploy
+      openshift.io/deployment-config.latest-version: "1"
+      openshift.io/deployment-config.name: mywebserver
+      openshift.io/deployment.phase: Complete
+      openshift.io/deployment.replicas: "1"
+      openshift.io/deployment.status-reason: config change
+      openshift.io/encoded-deployment-config: |
+        {"kind":"DeploymentConfig","apiVersion":"apps.openshift.io/v1","metadata":{"name":"mywebserver","namespace":"bootcamp","selfLink":"/apis/apps.openshift.io/v1/namespaces/bootcamp/deploymentconfigs/mywebserver","uid":"b551004f-ea7b-11e9-a2b9-0800276cf440","resourceVersion":"907862","generation":2,"creationTimestamp":"2019-10-09T10:01:05Z","labels":{"app":"mywebserver"},"annotations":{"openshift.io/generated-by":"OpenShiftWebConsole"}},"spec":{"strategy":{"type":"Rolling","rollingParams":{"updatePeriodSeconds":1,"intervalSeconds":1,"timeoutSeconds":600,"maxUnavailable":"25%","maxSurge":"25%"},"resources":{},"activeDeadlineSeconds":21600},"triggers":[{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["mywebserver"],"from":{"kind":"ImageStreamTag","namespace":"bootcamp","name":"mywebserver:latest"},"lastTriggeredImage":"172.30.1.1:5000/bootcamp/mywebserver@sha256:469872e623080d01e33b73af9075c356ed0d4800a525ea608ae60c053e5964e1"}},{"type":"ConfigChange"}],"replicas":1,"test":false,"selector":{"deploymentconfig":"mywebserver"},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"mywebserver","deploymentconfig":"mywebserver"}},"spec":{"containers":[{"name":"mywebserver","image":"172.30.1.1:5000/bootcamp/mywebserver@sha256:469872e623080d01e33b73af9075c356ed0d4800a525ea608ae60c053e5964e1","ports":[{"containerPort":8080,"protocol":"TCP"},{"containerPort":8443,"protocol":"TCP"}],"resources":{},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","imagePullPolicy":"Always"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{},"schedulerName":"default-scheduler"}}},"status":{"latestVersion":1,"observedGeneration":1,"replicas":0,"updatedReplicas":0,"availableReplicas":0,"unavailableReplicas":0,"details":{"message":"config change","causes":[{"type":"ConfigChange"}]},"conditions":[{"type":"Available","status":"False","lastUpdateTime":"2019-10-09T10:01:05Z","lastTransitionTime":"2019-10-09T10:01:05Z","message":"Deployment config does not have minimum availability."}]}}
+    creationTimestamp: 2019-10-09T10:02:02Z
+    generation: 5
+    labels:
+      app: mywebserver
+      openshift.io/deployment-config.name: mywebserver
+    name: mywebserver-1
+    namespace: bootcamp
+    ownerReferences:
+    - apiVersion: apps.openshift.io/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: DeploymentConfig
+      name: mywebserver
+      uid: b551004f-ea7b-11e9-a2b9-0800276cf440
+    resourceVersion: "909257"
+    selfLink: /api/v1/namespaces/bootcamp/replicationcontrollers/mywebserver-1
+    uid: d6fa6ba1-ea7b-11e9-8600-0800276cf440
+  spec:
+    replicas: 0
+    selector:
+      deployment: mywebserver-1
+      deploymentconfig: mywebserver
+    template:
+      metadata:
+        annotations:
+          openshift.io/deployment-config.latest-version: "1"
+          openshift.io/deployment-config.name: mywebserver
+          openshift.io/deployment.name: mywebserver-1
+        creationTimestamp: null
+        labels:
+          app: mywebserver
+          deployment: mywebserver-1
+          deploymentconfig: mywebserver
+      spec:
+        containers:
+        - image: 172.30.1.1:5000/bootcamp/mywebserver@sha256:469872e623080d01e33b73af9075c356ed0d4800a525ea608ae60c053e5964e1
+          imagePullPolicy: Always
+          name: mywebserver
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 8443
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 5
+    replicas: 0
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/original-replicas: "1"
+      openshift.io/deployer-pod.completed-at: 2019-10-09 10:07:04 +0000 UTC
+      openshift.io/deployer-pod.created-at: 2019-10-09 10:06:54 +0000 UTC
+      openshift.io/deployer-pod.name: mywebserver-2-deploy
+      openshift.io/deployment-config.latest-version: "2"
+      openshift.io/deployment-config.name: mywebserver
+      openshift.io/deployment.phase: Complete
+      openshift.io/deployment.replicas: ""
+      openshift.io/deployment.status-reason: config change
+      openshift.io/encoded-deployment-config: |
+        {"kind":"DeploymentConfig","apiVersion":"apps.openshift.io/v1","metadata":{"name":"mywebserver","namespace":"bootcamp","selfLink":"/apis/apps.openshift.io/v1/namespaces/bootcamp/deploymentconfigs/mywebserver","uid":"b551004f-ea7b-11e9-a2b9-0800276cf440","resourceVersion":"909181","generation":5,"creationTimestamp":"2019-10-09T10:01:05Z","labels":{"app":"mywebserver"},"annotations":{"openshift.io/generated-by":"OpenShiftWebConsole"}},"spec":{"strategy":{"type":"Rolling","rollingParams":{"updatePeriodSeconds":1,"intervalSeconds":1,"timeoutSeconds":600,"maxUnavailable":"25%","maxSurge":"25%"},"resources":{},"activeDeadlineSeconds":21600},"triggers":[{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["mywebserver"],"from":{"kind":"ImageStreamTag","namespace":"bootcamp","name":"mywebserver:latest"},"lastTriggeredImage":"172.30.1.1:5000/bootcamp/mywebserver@sha256:469872e623080d01e33b73af9075c356ed0d4800a525ea608ae60c053e5964e1"}},{"type":"ConfigChange"}],"replicas":1,"test":false,"selector":{"deploymentconfig":"mywebserver"},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"mywebserver","deploymentconfig":"mywebserver"}},"spec":{"containers":[{"name":"mywebserver","image":"172.30.1.1:5000/bootcamp/mywebserver@sha256:469872e623080d01e33b73af9075c356ed0d4800a525ea608ae60c053e5964e1","ports":[{"containerPort":8080,"protocol":"TCP"},{"containerPort":8443,"protocol":"TCP"}],"resources":{},"livenessProbe":{"httpGet":{"path":"/index.html","port":8080,"scheme":"HTTP"},"timeoutSeconds":1,"periodSeconds":10,"successThreshold":1,"failureThreshold":3},"readinessProbe":{"httpGet":{"path":"/index.html","port":8080,"scheme":"HTTP"},"timeoutSeconds":1,"periodSeconds":10,"successThreshold":1,"failureThreshold":3},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","imagePullPolicy":"Always"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{},"schedulerName":"default-scheduler"}}},"status":{"latestVersion":2,"observedGeneration":4,"replicas":1,"updatedReplicas":1,"availableReplicas":1,"unavailableReplicas":0,"details":{"message":"config change","causes":[{"type":"ConfigChange"}]},"conditions":[{"type":"Progressing","status":"True","lastUpdateTime":"2019-10-09T10:02:08Z","lastTransitionTime":"2019-10-09T10:02:08Z","reason":"NewReplicationControllerAvailable","message":"replication controller \"mywebserver-1\" successfully rolled out"},{"type":"Available","status":"True","lastUpdateTime":"2019-10-09T10:03:18Z","lastTransitionTime":"2019-10-09T10:03:18Z","message":"Deployment config has minimum availability."}],"readyReplicas":1}}
+    creationTimestamp: 2019-10-09T10:06:54Z
+    generation: 3
+    labels:
+      app: mywebserver
+      openshift.io/deployment-config.name: mywebserver
+    name: mywebserver-2
+    namespace: bootcamp
+    ownerReferences:
+    - apiVersion: apps.openshift.io/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: DeploymentConfig
+      name: mywebserver
+      uid: b551004f-ea7b-11e9-a2b9-0800276cf440
+    resourceVersion: "931551"
+    selfLink: /api/v1/namespaces/bootcamp/replicationcontrollers/mywebserver-2
+    uid: 858003d8-ea7c-11e9-8600-0800276cf440
+  spec:
+    replicas: 0
+    selector:
+      deployment: mywebserver-2
+      deploymentconfig: mywebserver
+    template:
+      metadata:
+        annotations:
+          openshift.io/deployment-config.latest-version: "2"
+          openshift.io/deployment-config.name: mywebserver
+          openshift.io/deployment.name: mywebserver-2
+        creationTimestamp: null
+        labels:
+          app: mywebserver
+          deployment: mywebserver-2
+          deploymentconfig: mywebserver
+      spec:
+        containers:
+        - image: 172.30.1.1:5000/bootcamp/mywebserver@sha256:469872e623080d01e33b73af9075c356ed0d4800a525ea608ae60c053e5964e1
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /index.html
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: mywebserver
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 8443
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /index.html
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 3
+    replicas: 0
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    annotations:
+      openshift.io/deployer-pod.completed-at: 2019-10-09 11:39:00 +0000 UTC
+      openshift.io/deployer-pod.created-at: 2019-10-09 11:38:47 +0000 UTC
+      openshift.io/deployer-pod.name: mywebserver-3-deploy
+      openshift.io/deployment-config.latest-version: "3"
+      openshift.io/deployment-config.name: mywebserver
+      openshift.io/deployment.phase: Complete
+      openshift.io/deployment.replicas: ""
+      openshift.io/deployment.status-reason: manual change
+      openshift.io/encoded-deployment-config: |
+        {"kind":"DeploymentConfig","apiVersion":"apps.openshift.io/v1","metadata":{"name":"mywebserver","namespace":"bootcamp","selfLink":"/apis/apps.openshift.io/v1/namespaces/bootcamp/deploymentconfigs/mywebserver","uid":"b551004f-ea7b-11e9-a2b9-0800276cf440","resourceVersion":"931463","generation":6,"creationTimestamp":"2019-10-09T10:01:05Z","labels":{"app":"mywebserver"},"annotations":{"openshift.io/generated-by":"OpenShiftWebConsole"}},"spec":{"strategy":{"type":"Rolling","rollingParams":{"updatePeriodSeconds":1,"intervalSeconds":1,"timeoutSeconds":600,"maxUnavailable":"25%","maxSurge":"25%"},"resources":{},"activeDeadlineSeconds":21600},"triggers":[{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["mywebserver"],"from":{"kind":"ImageStreamTag","namespace":"bootcamp","name":"mywebserver:latest"},"lastTriggeredImage":"172.30.1.1:5000/bootcamp/mywebserver@sha256:469872e623080d01e33b73af9075c356ed0d4800a525ea608ae60c053e5964e1"}},{"type":"ConfigChange"}],"replicas":1,"test":false,"selector":{"deploymentconfig":"mywebserver"},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"mywebserver","deploymentconfig":"mywebserver"}},"spec":{"containers":[{"name":"mywebserver","image":"172.30.1.1:5000/bootcamp/mywebserver@sha256:469872e623080d01e33b73af9075c356ed0d4800a525ea608ae60c053e5964e1","ports":[{"containerPort":8080,"protocol":"TCP"},{"containerPort":8443,"protocol":"TCP"}],"resources":{},"livenessProbe":{"httpGet":{"path":"/index.html","port":8080,"scheme":"HTTP"},"timeoutSeconds":1,"periodSeconds":10,"successThreshold":1,"failureThreshold":3},"readinessProbe":{"httpGet":{"path":"/index.html","port":8080,"scheme":"HTTP"},"timeoutSeconds":1,"periodSeconds":10,"successThreshold":1,"failureThreshold":3},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","imagePullPolicy":"Always"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{},"schedulerName":"default-scheduler"}}},"status":{"latestVersion":3,"observedGeneration":5,"replicas":1,"updatedReplicas":1,"availableReplicas":1,"unavailableReplicas":0,"details":{"message":"manual change","causes":[{"type":"Manual"}]},"conditions":[{"type":"Available","status":"True","lastUpdateTime":"2019-10-09T10:03:18Z","lastTransitionTime":"2019-10-09T10:03:18Z","message":"Deployment config has minimum availability."},{"type":"Progressing","status":"True","lastUpdateTime":"2019-10-09T10:07:04Z","lastTransitionTime":"2019-10-09T10:07:02Z","reason":"NewReplicationControllerAvailable","message":"replication controller \"mywebserver-2\" successfully rolled out"}],"readyReplicas":1}}
+    creationTimestamp: 2019-10-09T11:38:47Z
+    generation: 2
+    labels:
+      app: mywebserver
+      openshift.io/deployment-config.name: mywebserver
+    name: mywebserver-3
+    namespace: bootcamp
+    ownerReferences:
+    - apiVersion: apps.openshift.io/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: DeploymentConfig
+      name: mywebserver
+      uid: b551004f-ea7b-11e9-a2b9-0800276cf440
+    resourceVersion: "931570"
+    selfLink: /api/v1/namespaces/bootcamp/replicationcontrollers/mywebserver-3
+    uid: 5b17217a-ea89-11e9-8600-0800276cf440
+  spec:
+    replicas: 1
+    selector:
+      deployment: mywebserver-3
+      deploymentconfig: mywebserver
+    template:
+      metadata:
+        annotations:
+          openshift.io/deployment-config.latest-version: "3"
+          openshift.io/deployment-config.name: mywebserver
+          openshift.io/deployment.name: mywebserver-3
+        creationTimestamp: null
+        labels:
+          app: mywebserver
+          deployment: mywebserver-3
+          deploymentconfig: mywebserver
+      spec:
+        containers:
+        - image: 172.30.1.1:5000/bootcamp/mywebserver@sha256:469872e623080d01e33b73af9075c356ed0d4800a525ea608ae60c053e5964e1
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /index.html
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: mywebserver
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 8443
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /index.html
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 2
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/original-replicas: "1"
+      openshift.io/deployer-pod.completed-at: 2019-10-09 12:18:15 +0000 UTC
+      openshift.io/deployer-pod.created-at: 2019-10-09 12:18:08 +0000 UTC
+      openshift.io/deployer-pod.name: task-1-deploy
+      openshift.io/deployment-config.latest-version: "1"
+      openshift.io/deployment-config.name: task
+      openshift.io/deployment.phase: Complete
+      openshift.io/deployment.replicas: "1"
+      openshift.io/deployment.status-reason: config change
+      openshift.io/encoded-deployment-config: |
+        {"kind":"DeploymentConfig","apiVersion":"apps.openshift.io/v1","metadata":{"name":"task","namespace":"bootcamp","selfLink":"/apis/apps.openshift.io/v1/namespaces/bootcamp/deploymentconfigs/task","uid":"d9a374e0-ea8e-11e9-a2b9-0800276cf440","resourceVersion":"941030","generation":2,"creationTimestamp":"2019-10-09T12:18:06Z","labels":{"app":"task"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"strategy":{"type":"Rolling","rollingParams":{"updatePeriodSeconds":1,"intervalSeconds":1,"timeoutSeconds":600,"maxUnavailable":"25%","maxSurge":"25%"},"resources":{},"activeDeadlineSeconds":21600},"triggers":[{"type":"ConfigChange"},{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["task"],"from":{"kind":"ImageStreamTag","namespace":"bootcamp","name":"task:latest"},"lastTriggeredImage":"172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13"}}],"replicas":1,"revisionHistoryLimit":10,"test":false,"selector":{"app":"task","deploymentconfig":"task"},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"task","deploymentconfig":"task"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"containers":[{"name":"task","image":"172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13","ports":[{"containerPort":8080,"protocol":"TCP"},{"containerPort":9009,"protocol":"TCP"}],"resources":{},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","imagePullPolicy":"Always"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{},"schedulerName":"default-scheduler"}}},"status":{"latestVersion":1,"observedGeneration":0,"replicas":0,"updatedReplicas":0,"availableReplicas":0,"unavailableReplicas":0,"details":{"message":"config change","causes":[{"type":"ConfigChange"}]}}}
+    creationTimestamp: 2019-10-09T12:18:07Z
+    generation: 3
+    labels:
+      app: task
+      openshift.io/deployment-config.name: task
+    name: task-1
+    namespace: bootcamp
+    ownerReferences:
+    - apiVersion: apps.openshift.io/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: DeploymentConfig
+      name: task
+      uid: d9a374e0-ea8e-11e9-a2b9-0800276cf440
+    resourceVersion: "944198"
+    selfLink: /api/v1/namespaces/bootcamp/replicationcontrollers/task-1
+    uid: da320393-ea8e-11e9-8600-0800276cf440
+  spec:
+    replicas: 0
+    selector:
+      app: task
+      deployment: task-1
+      deploymentconfig: task
+    template:
+      metadata:
+        annotations:
+          openshift.io/deployment-config.latest-version: "1"
+          openshift.io/deployment-config.name: task
+          openshift.io/deployment.name: task-1
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: task
+          deployment: task-1
+          deploymentconfig: task
+      spec:
+        containers:
+        - image: 172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13
+          imagePullPolicy: Always
+          name: task
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 9009
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 3
+    replicas: 0
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/original-replicas: "1"
+      openshift.io/deployer-pod.completed-at: 2019-10-09 12:30:58 +0000 UTC
+      openshift.io/deployer-pod.created-at: 2019-10-09 12:30:42 +0000 UTC
+      openshift.io/deployer-pod.name: task-2-deploy
+      openshift.io/deployment-config.latest-version: "2"
+      openshift.io/deployment-config.name: task
+      openshift.io/deployment.phase: Complete
+      openshift.io/deployment.replicas: ""
+      openshift.io/deployment.status-reason: manual change
+      openshift.io/encoded-deployment-config: |
+        {"kind":"DeploymentConfig","apiVersion":"apps.openshift.io/v1","metadata":{"name":"task","namespace":"bootcamp","selfLink":"/apis/apps.openshift.io/v1/namespaces/bootcamp/deploymentconfigs/task","uid":"d9a374e0-ea8e-11e9-a2b9-0800276cf440","resourceVersion":"944103","generation":3,"creationTimestamp":"2019-10-09T12:18:06Z","labels":{"app":"task"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"strategy":{"type":"Rolling","rollingParams":{"updatePeriodSeconds":1,"intervalSeconds":1,"timeoutSeconds":600,"maxUnavailable":"25%","maxSurge":"25%"},"resources":{},"activeDeadlineSeconds":21600},"triggers":[{"type":"ConfigChange"},{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["task"],"from":{"kind":"ImageStreamTag","namespace":"bootcamp","name":"task:latest"},"lastTriggeredImage":"172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13"}}],"replicas":1,"revisionHistoryLimit":10,"test":false,"selector":{"app":"task","deploymentconfig":"task"},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"task","deploymentconfig":"task"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"containers":[{"name":"task","image":"172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13","ports":[{"containerPort":8080,"protocol":"TCP"},{"containerPort":9009,"protocol":"TCP"}],"resources":{},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","imagePullPolicy":"Always"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{},"schedulerName":"default-scheduler"}}},"status":{"latestVersion":2,"observedGeneration":2,"replicas":1,"updatedReplicas":1,"availableReplicas":1,"unavailableReplicas":0,"details":{"message":"manual change","causes":[{"type":"Manual"}]},"conditions":[{"type":"Available","status":"True","lastUpdateTime":"2019-10-09T12:18:15Z","lastTransitionTime":"2019-10-09T12:18:15Z","message":"Deployment config has minimum availability."},{"type":"Progressing","status":"True","lastUpdateTime":"2019-10-09T12:18:17Z","lastTransitionTime":"2019-10-09T12:18:13Z","reason":"NewReplicationControllerAvailable","message":"replication controller \"task-1\" successfully rolled out"}],"readyReplicas":1}}
+    creationTimestamp: 2019-10-09T12:30:42Z
+    generation: 3
+    labels:
+      app: task
+      openshift.io/deployment-config.name: task
+    name: task-2
+    namespace: bootcamp
+    ownerReferences:
+    - apiVersion: apps.openshift.io/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: DeploymentConfig
+      name: task
+      uid: d9a374e0-ea8e-11e9-a2b9-0800276cf440
+    resourceVersion: "946863"
+    selfLink: /api/v1/namespaces/bootcamp/replicationcontrollers/task-2
+    uid: 9be9be70-ea90-11e9-8600-0800276cf440
+  spec:
+    replicas: 0
+    selector:
+      app: task
+      deployment: task-2
+      deploymentconfig: task
+    template:
+      metadata:
+        annotations:
+          openshift.io/deployment-config.latest-version: "2"
+          openshift.io/deployment-config.name: task
+          openshift.io/deployment.name: task-2
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: task
+          deployment: task-2
+          deploymentconfig: task
+      spec:
+        containers:
+        - image: 172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13
+          imagePullPolicy: Always
+          name: task
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 9009
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 3
+    replicas: 0
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/desired-replicas: "1"
+      openshift.io/deployer-pod.created-at: 2019-10-09 12:41:24 +0000 UTC
+      openshift.io/deployer-pod.name: task-3-deploy
+      openshift.io/deployment-config.latest-version: "3"
+      openshift.io/deployment-config.name: task
+      openshift.io/deployment.cancelled: "true"
+      openshift.io/deployment.phase: Failed
+      openshift.io/deployment.replicas: "0"
+      openshift.io/deployment.status-reason: newer deployment was found running
+      openshift.io/encoded-deployment-config: |
+        {"kind":"DeploymentConfig","apiVersion":"apps.openshift.io/v1","metadata":{"name":"task","namespace":"bootcamp","selfLink":"/apis/apps.openshift.io/v1/namespaces/bootcamp/deploymentconfigs/task","uid":"d9a374e0-ea8e-11e9-a2b9-0800276cf440","resourceVersion":"946727","generation":4,"creationTimestamp":"2019-10-09T12:18:06Z","labels":{"app":"task"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"strategy":{"type":"Rolling","rollingParams":{"updatePeriodSeconds":1,"intervalSeconds":1,"timeoutSeconds":600,"maxUnavailable":"25%","maxSurge":"25%"},"resources":{},"activeDeadlineSeconds":21600},"triggers":[{"type":"ConfigChange"},{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["task"],"from":{"kind":"ImageStreamTag","namespace":"bootcamp","name":"task:latest"},"lastTriggeredImage":"172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13"}}],"replicas":1,"revisionHistoryLimit":10,"test":false,"selector":{"app":"task","deploymentconfig":"task"},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"task","deploymentconfig":"task"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"containers":[{"name":"task","image":"172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13","ports":[{"containerPort":8080,"protocol":"TCP"},{"containerPort":9009,"protocol":"TCP"}],"resources":{},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","imagePullPolicy":"Always"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{},"schedulerName":"default-scheduler"}}},"status":{"latestVersion":3,"observedGeneration":3,"replicas":1,"updatedReplicas":1,"availableReplicas":1,"unavailableReplicas":0,"details":{"message":"manual change","causes":[{"type":"Manual"}]},"conditions":[{"type":"Available","status":"True","lastUpdateTime":"2019-10-09T12:18:15Z","lastTransitionTime":"2019-10-09T12:18:15Z","message":"Deployment config has minimum availability."},{"type":"Progressing","status":"True","lastUpdateTime":"2019-10-09T12:30:59Z","lastTransitionTime":"2019-10-09T12:30:56Z","reason":"NewReplicationControllerAvailable","message":"replication controller \"task-2\" successfully rolled out"}],"readyReplicas":1}}
+    creationTimestamp: 2019-10-09T12:41:24Z
+    generation: 1
+    labels:
+      app: task
+      openshift.io/deployment-config.name: task
+    name: task-3
+    namespace: bootcamp
+    ownerReferences:
+    - apiVersion: apps.openshift.io/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: DeploymentConfig
+      name: task
+      uid: d9a374e0-ea8e-11e9-a2b9-0800276cf440
+    resourceVersion: "946775"
+    selfLink: /api/v1/namespaces/bootcamp/replicationcontrollers/task-3
+    uid: 1a968c66-ea92-11e9-8600-0800276cf440
+  spec:
+    replicas: 0
+    selector:
+      app: task
+      deployment: task-3
+      deploymentconfig: task
+    template:
+      metadata:
+        annotations:
+          openshift.io/deployment-config.latest-version: "3"
+          openshift.io/deployment-config.name: task
+          openshift.io/deployment.name: task-3
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: task
+          deployment: task-3
+          deploymentconfig: task
+      spec:
+        containers:
+        - image: 172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13
+          imagePullPolicy: Always
+          name: task
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 9009
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 1
+    replicas: 0
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/original-replicas: "1"
+      openshift.io/deployer-pod.completed-at: 2019-10-09 12:41:42 +0000 UTC
+      openshift.io/deployer-pod.created-at: 2019-10-09 12:41:29 +0000 UTC
+      openshift.io/deployer-pod.name: task-4-deploy
+      openshift.io/deployment-config.latest-version: "4"
+      openshift.io/deployment-config.name: task
+      openshift.io/deployment.phase: Complete
+      openshift.io/deployment.replicas: ""
+      openshift.io/deployment.status-reason: config change
+      openshift.io/encoded-deployment-config: |
+        {"kind":"DeploymentConfig","apiVersion":"apps.openshift.io/v1","metadata":{"name":"task","namespace":"bootcamp","selfLink":"/apis/apps.openshift.io/v1/namespaces/bootcamp/deploymentconfigs/task","uid":"d9a374e0-ea8e-11e9-a2b9-0800276cf440","resourceVersion":"946745","generation":5,"creationTimestamp":"2019-10-09T12:18:06Z","labels":{"app":"task"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"strategy":{"type":"Rolling","rollingParams":{"updatePeriodSeconds":1,"intervalSeconds":1,"timeoutSeconds":600,"maxUnavailable":"25%","maxSurge":"25%"},"resources":{},"activeDeadlineSeconds":21600},"triggers":[{"type":"ConfigChange"},{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["task"],"from":{"kind":"ImageStreamTag","namespace":"bootcamp","name":"task:latest"},"lastTriggeredImage":"172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13"}}],"replicas":1,"revisionHistoryLimit":10,"test":false,"selector":{"app":"task","deploymentconfig":"task"},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"task","deploymentconfig":"task"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"containers":[{"name":"task","image":"172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13","ports":[{"containerPort":8080,"protocol":"TCP"},{"containerPort":9009,"protocol":"TCP"}],"env":[{"name":"DB_SERVER","valueFrom":{"secretKeyRef":{"name":"task-db","key":"database-name"}}},{"name":"DB_USER","valueFrom":{"secretKeyRef":{"name":"task-db","key":"database-user"}}},{"name":"DB_PASSWORD","valueFrom":{"secretKeyRef":{"name":"task-db","key":"database-password"}}}],"resources":{},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","imagePullPolicy":"Always"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{},"schedulerName":"default-scheduler"}}},"status":{"latestVersion":4,"observedGeneration":4,"replicas":1,"updatedReplicas":0,"availableReplicas":1,"unavailableReplicas":0,"details":{"message":"config change","causes":[{"type":"ConfigChange"}]},"conditions":[{"type":"Available","status":"True","lastUpdateTime":"2019-10-09T12:18:15Z","lastTransitionTime":"2019-10-09T12:18:15Z","message":"Deployment config has minimum availability."},{"type":"Progressing","status":"Unknown","lastUpdateTime":"2019-10-09T12:41:24Z","lastTransitionTime":"2019-10-09T12:41:24Z","message":"replication controller \"task-3\" is waiting for pod \"task-3-deploy\" to run"}],"readyReplicas":1}}
+    creationTimestamp: 2019-10-09T12:41:28Z
+    generation: 3
+    labels:
+      app: task
+      openshift.io/deployment-config.name: task
+    name: task-4
+    namespace: bootcamp
+    ownerReferences:
+    - apiVersion: apps.openshift.io/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: DeploymentConfig
+      name: task
+      uid: d9a374e0-ea8e-11e9-a2b9-0800276cf440
+    resourceVersion: "948157"
+    selfLink: /api/v1/namespaces/bootcamp/replicationcontrollers/task-4
+    uid: 1d352a9b-ea92-11e9-8600-0800276cf440
+  spec:
+    replicas: 0
+    selector:
+      app: task
+      deployment: task-4
+      deploymentconfig: task
+    template:
+      metadata:
+        annotations:
+          openshift.io/deployment-config.latest-version: "4"
+          openshift.io/deployment-config.name: task
+          openshift.io/deployment.name: task-4
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: task
+          deployment: task-4
+          deploymentconfig: task
+      spec:
+        containers:
+        - env:
+          - name: DB_SERVER
+            valueFrom:
+              secretKeyRef:
+                key: database-name
+                name: task-db
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: task-db
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-password
+                name: task-db
+          image: 172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13
+          imagePullPolicy: Always
+          name: task
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 9009
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 3
+    replicas: 0
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/original-replicas: "1"
+      openshift.io/deployer-pod.completed-at: 2019-10-09 12:46:52 +0000 UTC
+      openshift.io/deployer-pod.created-at: 2019-10-09 12:46:40 +0000 UTC
+      openshift.io/deployer-pod.name: task-5-deploy
+      openshift.io/deployment-config.latest-version: "5"
+      openshift.io/deployment-config.name: task
+      openshift.io/deployment.phase: Complete
+      openshift.io/deployment.replicas: ""
+      openshift.io/deployment.status-reason: manual change
+      openshift.io/encoded-deployment-config: |
+        {"kind":"DeploymentConfig","apiVersion":"apps.openshift.io/v1","metadata":{"name":"task","namespace":"bootcamp","selfLink":"/apis/apps.openshift.io/v1/namespaces/bootcamp/deploymentconfigs/task","uid":"d9a374e0-ea8e-11e9-a2b9-0800276cf440","resourceVersion":"948076","generation":6,"creationTimestamp":"2019-10-09T12:18:06Z","labels":{"app":"task"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"strategy":{"type":"Rolling","rollingParams":{"updatePeriodSeconds":1,"intervalSeconds":1,"timeoutSeconds":600,"maxUnavailable":"25%","maxSurge":"25%"},"resources":{},"activeDeadlineSeconds":21600},"triggers":[{"type":"ConfigChange"},{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["task"],"from":{"kind":"ImageStreamTag","namespace":"bootcamp","name":"task:latest"},"lastTriggeredImage":"172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13"}}],"replicas":1,"revisionHistoryLimit":10,"test":false,"selector":{"app":"task","deploymentconfig":"task"},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"task","deploymentconfig":"task"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"containers":[{"name":"task","image":"172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13","ports":[{"containerPort":8080,"protocol":"TCP"},{"containerPort":9009,"protocol":"TCP"}],"env":[{"name":"DB_SERVER","valueFrom":{"secretKeyRef":{"name":"task-db","key":"database-name"}}},{"name":"DB_USER","valueFrom":{"secretKeyRef":{"name":"task-db","key":"database-user"}}},{"name":"DB_PASSWORD","valueFrom":{"secretKeyRef":{"name":"task-db","key":"database-password"}}}],"resources":{},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","imagePullPolicy":"Always"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{},"schedulerName":"default-scheduler"}}},"status":{"latestVersion":5,"observedGeneration":5,"replicas":1,"updatedReplicas":1,"availableReplicas":1,"unavailableReplicas":0,"details":{"message":"manual change","causes":[{"type":"Manual"}]},"conditions":[{"type":"Available","status":"True","lastUpdateTime":"2019-10-09T12:18:15Z","lastTransitionTime":"2019-10-09T12:18:15Z","message":"Deployment config has minimum availability."},{"type":"Progressing","status":"True","lastUpdateTime":"2019-10-09T12:41:43Z","lastTransitionTime":"2019-10-09T12:41:40Z","reason":"NewReplicationControllerAvailable","message":"replication controller \"task-4\" successfully rolled out"}],"readyReplicas":1}}
+    creationTimestamp: 2019-10-09T12:46:39Z
+    generation: 3
+    labels:
+      app: task
+      openshift.io/deployment-config.name: task
+    name: task-5
+    namespace: bootcamp
+    ownerReferences:
+    - apiVersion: apps.openshift.io/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: DeploymentConfig
+      name: task
+      uid: d9a374e0-ea8e-11e9-a2b9-0800276cf440
+    resourceVersion: "951028"
+    selfLink: /api/v1/namespaces/bootcamp/replicationcontrollers/task-5
+    uid: d6af3a78-ea92-11e9-8600-0800276cf440
+  spec:
+    replicas: 0
+    selector:
+      app: task
+      deployment: task-5
+      deploymentconfig: task
+    template:
+      metadata:
+        annotations:
+          openshift.io/deployment-config.latest-version: "5"
+          openshift.io/deployment-config.name: task
+          openshift.io/deployment.name: task-5
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: task
+          deployment: task-5
+          deploymentconfig: task
+      spec:
+        containers:
+        - env:
+          - name: DB_SERVER
+            valueFrom:
+              secretKeyRef:
+                key: database-name
+                name: task-db
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: task-db
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-password
+                name: task-db
+          image: 172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13
+          imagePullPolicy: Always
+          name: task
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 9009
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 3
+    replicas: 0
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/original-replicas: "1"
+      openshift.io/deployer-pod.completed-at: 2019-10-09 12:58:24 +0000 UTC
+      openshift.io/deployer-pod.created-at: 2019-10-09 12:58:09 +0000 UTC
+      openshift.io/deployer-pod.name: task-6-deploy
+      openshift.io/deployment-config.latest-version: "6"
+      openshift.io/deployment-config.name: task
+      openshift.io/deployment.phase: Complete
+      openshift.io/deployment.replicas: ""
+      openshift.io/deployment.status-reason: config change
+      openshift.io/encoded-deployment-config: |
+        {"kind":"DeploymentConfig","apiVersion":"apps.openshift.io/v1","metadata":{"name":"task","namespace":"bootcamp","selfLink":"/apis/apps.openshift.io/v1/namespaces/bootcamp/deploymentconfigs/task","uid":"d9a374e0-ea8e-11e9-a2b9-0800276cf440","resourceVersion":"950935","generation":7,"creationTimestamp":"2019-10-09T12:18:06Z","labels":{"app":"task"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"strategy":{"type":"Rolling","rollingParams":{"updatePeriodSeconds":1,"intervalSeconds":1,"timeoutSeconds":600,"maxUnavailable":"25%","maxSurge":"25%"},"resources":{},"activeDeadlineSeconds":21600},"triggers":[{"type":"ConfigChange"},{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["task"],"from":{"kind":"ImageStreamTag","namespace":"bootcamp","name":"task:latest"},"lastTriggeredImage":"172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13"}}],"replicas":1,"revisionHistoryLimit":10,"test":false,"selector":{"app":"task","deploymentconfig":"task"},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"task","deploymentconfig":"task"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"containers":[{"name":"task","image":"172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13","ports":[{"containerPort":8080,"protocol":"TCP"},{"containerPort":9009,"protocol":"TCP"}],"env":[{"name":"DB_USER","valueFrom":{"secretKeyRef":{"name":"task-db","key":"database-user"}}},{"name":"DB_PASSWORD","valueFrom":{"secretKeyRef":{"name":"task-db","key":"database-password"}}},{"name":"DB_SERVER","value":"task-db"}],"resources":{},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","imagePullPolicy":"Always"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{},"schedulerName":"default-scheduler"}}},"status":{"latestVersion":6,"observedGeneration":6,"replicas":1,"updatedReplicas":1,"availableReplicas":1,"unavailableReplicas":0,"details":{"message":"config change","causes":[{"type":"ConfigChange"}]},"conditions":[{"type":"Available","status":"True","lastUpdateTime":"2019-10-09T12:18:15Z","lastTransitionTime":"2019-10-09T12:18:15Z","message":"Deployment config has minimum availability."},{"type":"Progressing","status":"True","lastUpdateTime":"2019-10-09T12:46:53Z","lastTransitionTime":"2019-10-09T12:46:50Z","reason":"NewReplicationControllerAvailable","message":"replication controller \"task-5\" successfully rolled out"}],"readyReplicas":1}}
+    creationTimestamp: 2019-10-09T12:58:08Z
+    generation: 3
+    labels:
+      app: task
+      openshift.io/deployment-config.name: task
+    name: task-6
+    namespace: bootcamp
+    ownerReferences:
+    - apiVersion: apps.openshift.io/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: DeploymentConfig
+      name: task
+      uid: d9a374e0-ea8e-11e9-a2b9-0800276cf440
+    resourceVersion: "951288"
+    selfLink: /api/v1/namespaces/bootcamp/replicationcontrollers/task-6
+    uid: 71456c59-ea94-11e9-8600-0800276cf440
+  spec:
+    replicas: 0
+    selector:
+      app: task
+      deployment: task-6
+      deploymentconfig: task
+    template:
+      metadata:
+        annotations:
+          openshift.io/deployment-config.latest-version: "6"
+          openshift.io/deployment-config.name: task
+          openshift.io/deployment.name: task-6
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: task
+          deployment: task-6
+          deploymentconfig: task
+      spec:
+        containers:
+        - env:
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: task-db
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-password
+                name: task-db
+          - name: DB_SERVER
+            value: task-db
+          image: 172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13
+          imagePullPolicy: Always
+          name: task
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 9009
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 3
+    replicas: 0
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/original-replicas: "1"
+      openshift.io/deployer-pod.completed-at: 2019-10-09 12:59:16 +0000 UTC
+      openshift.io/deployer-pod.created-at: 2019-10-09 12:58:59 +0000 UTC
+      openshift.io/deployer-pod.name: task-7-deploy
+      openshift.io/deployment-config.latest-version: "7"
+      openshift.io/deployment-config.name: task
+      openshift.io/deployment.phase: Complete
+      openshift.io/deployment.replicas: ""
+      openshift.io/deployment.status-reason: manual change
+      openshift.io/encoded-deployment-config: |
+        {"kind":"DeploymentConfig","apiVersion":"apps.openshift.io/v1","metadata":{"name":"task","namespace":"bootcamp","selfLink":"/apis/apps.openshift.io/v1/namespaces/bootcamp/deploymentconfigs/task","uid":"d9a374e0-ea8e-11e9-a2b9-0800276cf440","resourceVersion":"951188","generation":8,"creationTimestamp":"2019-10-09T12:18:06Z","labels":{"app":"task"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"strategy":{"type":"Rolling","rollingParams":{"updatePeriodSeconds":1,"intervalSeconds":1,"timeoutSeconds":600,"maxUnavailable":"25%","maxSurge":"25%"},"resources":{},"activeDeadlineSeconds":21600},"triggers":[{"type":"ConfigChange"},{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["task"],"from":{"kind":"ImageStreamTag","namespace":"bootcamp","name":"task:latest"},"lastTriggeredImage":"172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13"}}],"replicas":1,"revisionHistoryLimit":10,"test":false,"selector":{"app":"task","deploymentconfig":"task"},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"task","deploymentconfig":"task"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"containers":[{"name":"task","image":"172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13","ports":[{"containerPort":8080,"protocol":"TCP"},{"containerPort":9009,"protocol":"TCP"}],"env":[{"name":"DB_USER","valueFrom":{"secretKeyRef":{"name":"task-db","key":"database-user"}}},{"name":"DB_PASSWORD","valueFrom":{"secretKeyRef":{"name":"task-db","key":"database-password"}}},{"name":"DB_SERVER","value":"task-db"}],"resources":{},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","imagePullPolicy":"Always"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{},"schedulerName":"default-scheduler"}}},"status":{"latestVersion":7,"observedGeneration":7,"replicas":1,"updatedReplicas":1,"availableReplicas":1,"unavailableReplicas":0,"details":{"message":"manual change","causes":[{"type":"Manual"}]},"conditions":[{"type":"Available","status":"True","lastUpdateTime":"2019-10-09T12:18:15Z","lastTransitionTime":"2019-10-09T12:18:15Z","message":"Deployment config has minimum availability."},{"type":"Progressing","status":"True","lastUpdateTime":"2019-10-09T12:58:24Z","lastTransitionTime":"2019-10-09T12:58:21Z","reason":"NewReplicationControllerAvailable","message":"replication controller \"task-6\" successfully rolled out"}],"readyReplicas":1}}
+    creationTimestamp: 2019-10-09T12:58:58Z
+    generation: 3
+    labels:
+      app: task
+      openshift.io/deployment-config.name: task
+    name: task-7
+    namespace: bootcamp
+    ownerReferences:
+    - apiVersion: apps.openshift.io/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: DeploymentConfig
+      name: task
+      uid: d9a374e0-ea8e-11e9-a2b9-0800276cf440
+    resourceVersion: "952340"
+    selfLink: /api/v1/namespaces/bootcamp/replicationcontrollers/task-7
+    uid: 8f28c6c2-ea94-11e9-8600-0800276cf440
+  spec:
+    replicas: 0
+    selector:
+      app: task
+      deployment: task-7
+      deploymentconfig: task
+    template:
+      metadata:
+        annotations:
+          openshift.io/deployment-config.latest-version: "7"
+          openshift.io/deployment-config.name: task
+          openshift.io/deployment.name: task-7
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: task
+          deployment: task-7
+          deploymentconfig: task
+      spec:
+        containers:
+        - env:
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: task-db
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-password
+                name: task-db
+          - name: DB_SERVER
+            value: task-db
+          image: 172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13
+          imagePullPolicy: Always
+          name: task
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 9009
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 3
+    replicas: 0
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    annotations:
+      openshift.io/deployer-pod.completed-at: 2019-10-09 13:03:23 +0000 UTC
+      openshift.io/deployer-pod.created-at: 2019-10-09 13:01:23 +0000 UTC
+      openshift.io/deployer-pod.name: task-8-deploy
+      openshift.io/deployment-config.latest-version: "8"
+      openshift.io/deployment-config.name: task
+      openshift.io/deployment.phase: Complete
+      openshift.io/deployment.replicas: ""
+      openshift.io/deployment.status-reason: config change
+      openshift.io/encoded-deployment-config: |
+        {"kind":"DeploymentConfig","apiVersion":"apps.openshift.io/v1","metadata":{"name":"task","namespace":"bootcamp","selfLink":"/apis/apps.openshift.io/v1/namespaces/bootcamp/deploymentconfigs/task","uid":"d9a374e0-ea8e-11e9-a2b9-0800276cf440","resourceVersion":"951816","generation":9,"creationTimestamp":"2019-10-09T12:18:06Z","labels":{"app":"task"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"strategy":{"type":"Rolling","rollingParams":{"updatePeriodSeconds":1,"intervalSeconds":1,"timeoutSeconds":600,"maxUnavailable":"25%","maxSurge":"25%"},"resources":{},"activeDeadlineSeconds":21600},"triggers":[{"type":"ConfigChange"},{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["task"],"from":{"kind":"ImageStreamTag","namespace":"bootcamp","name":"task:latest"},"lastTriggeredImage":"172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13"}}],"replicas":1,"revisionHistoryLimit":10,"test":false,"selector":{"app":"task","deploymentconfig":"task"},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"task","deploymentconfig":"task"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"containers":[{"name":"task","image":"172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13","ports":[{"containerPort":8080,"protocol":"TCP"},{"containerPort":9009,"protocol":"TCP"}],"env":[{"name":"DB_USER","valueFrom":{"secretKeyRef":{"name":"task-db","key":"database-user"}}},{"name":"DB_PASSWORD","valueFrom":{"secretKeyRef":{"name":"task-db","key":"database-password"}}},{"name":"DB_SERVER","value":"task-db"}],"resources":{},"livenessProbe":{"httpGet":{"path":"/data/hello","port":8080,"scheme":"HTTP"},"initialDelaySeconds":30,"timeoutSeconds":3,"periodSeconds":10,"successThreshold":1,"failureThreshold":3},"readinessProbe":{"httpGet":{"path":"/data/hello","port":8080,"scheme":"HTTP"},"initialDelaySeconds":30,"timeoutSeconds":3,"periodSeconds":10,"successThreshold":1,"failureThreshold":3},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","imagePullPolicy":"Always"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{},"schedulerName":"default-scheduler"}}},"status":{"latestVersion":8,"observedGeneration":8,"replicas":1,"updatedReplicas":1,"availableReplicas":1,"unavailableReplicas":0,"details":{"message":"config change","causes":[{"type":"ConfigChange"}]},"conditions":[{"type":"Available","status":"True","lastUpdateTime":"2019-10-09T12:18:15Z","lastTransitionTime":"2019-10-09T12:18:15Z","message":"Deployment config has minimum availability."},{"type":"Progressing","status":"True","lastUpdateTime":"2019-10-09T12:59:19Z","lastTransitionTime":"2019-10-09T12:59:14Z","reason":"NewReplicationControllerAvailable","message":"replication controller \"task-7\" successfully rolled out"}],"readyReplicas":1}}
+    creationTimestamp: 2019-10-09T13:01:22Z
+    generation: 2
+    labels:
+      app: task
+      openshift.io/deployment-config.name: task
+    name: task-8
+    namespace: bootcamp
+    ownerReferences:
+    - apiVersion: apps.openshift.io/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: DeploymentConfig
+      name: task
+      uid: d9a374e0-ea8e-11e9-a2b9-0800276cf440
+    resourceVersion: "952366"
+    selfLink: /api/v1/namespaces/bootcamp/replicationcontrollers/task-8
+    uid: e4c7173a-ea94-11e9-8600-0800276cf440
+  spec:
+    replicas: 1
+    selector:
+      app: task
+      deployment: task-8
+      deploymentconfig: task
+    template:
+      metadata:
+        annotations:
+          openshift.io/deployment-config.latest-version: "8"
+          openshift.io/deployment-config.name: task
+          openshift.io/deployment.name: task-8
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: task
+          deployment: task-8
+          deploymentconfig: task
+      spec:
+        containers:
+        - env:
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: task-db
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-password
+                name: task-db
+          - name: DB_SERVER
+            value: task-db
+          image: 172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /data/hello
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+          name: task
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 9009
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /data/hello
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 2
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    annotations:
+      openshift.io/deployer-pod.completed-at: 2019-10-09 10:48:13 +0000 UTC
+      openshift.io/deployer-pod.created-at: 2019-10-09 10:46:58 +0000 UTC
+      openshift.io/deployer-pod.name: task-db-1-deploy
+      openshift.io/deployment-config.latest-version: "1"
+      openshift.io/deployment-config.name: task-db
+      openshift.io/deployment.phase: Complete
+      openshift.io/deployment.replicas: "1"
+      openshift.io/deployment.status-reason: config change
+      openshift.io/encoded-deployment-config: |
+        {"kind":"DeploymentConfig","apiVersion":"apps.openshift.io/v1","metadata":{"name":"task-db","namespace":"bootcamp","selfLink":"/apis/apps.openshift.io/v1/namespaces/bootcamp/deploymentconfigs/task-db","uid":"1d042edd-ea82-11e9-a2b9-0800276cf440","resourceVersion":"918917","generation":2,"creationTimestamp":"2019-10-09T10:46:56Z","labels":{"app":"postgresql-persistent","template":"postgresql-persistent-template"},"annotations":{"template.alpha.openshift.io/wait-for-ready":"true"}},"spec":{"strategy":{"type":"Recreate","recreateParams":{"timeoutSeconds":600},"resources":{},"activeDeadlineSeconds":21600},"triggers":[{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["postgresql"],"from":{"kind":"ImageStreamTag","namespace":"openshift","name":"postgresql:9.6"},"lastTriggeredImage":"172.30.1.1:5000/openshift/postgresql@sha256:539f3b22082290601cb2d13c3a288d126554a9f3898008dae18af68f4d2cce90"}},{"type":"ConfigChange"}],"replicas":1,"revisionHistoryLimit":10,"test":false,"selector":{"name":"task-db"},"template":{"metadata":{"creationTimestamp":null,"labels":{"name":"task-db"}},"spec":{"volumes":[{"name":"task-db-data","persistentVolumeClaim":{"claimName":"task-db"}}],"containers":[{"name":"postgresql","image":"172.30.1.1:5000/openshift/postgresql@sha256:539f3b22082290601cb2d13c3a288d126554a9f3898008dae18af68f4d2cce90","ports":[{"containerPort":5432,"protocol":"TCP"}],"env":[{"name":"POSTGRESQL_USER","valueFrom":{"secretKeyRef":{"name":"task-db","key":"database-user"}}},{"name":"POSTGRESQL_PASSWORD","valueFrom":{"secretKeyRef":{"name":"task-db","key":"database-password"}}},{"name":"POSTGRESQL_DATABASE","valueFrom":{"secretKeyRef":{"name":"task-db","key":"database-name"}}}],"resources":{"limits":{"memory":"512Mi"}},"volumeMounts":[{"name":"task-db-data","mountPath":"/var/lib/pgsql/data"}],"livenessProbe":{"exec":{"command":["/usr/libexec/check-container","--live"]},"initialDelaySeconds":120,"timeoutSeconds":10,"periodSeconds":10,"successThreshold":1,"failureThreshold":3},"readinessProbe":{"exec":{"command":["/usr/libexec/check-container"]},"initialDelaySeconds":5,"timeoutSeconds":1,"periodSeconds":10,"successThreshold":1,"failureThreshold":3},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","imagePullPolicy":"IfNotPresent","securityContext":{"capabilities":{},"privileged":false}}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{},"schedulerName":"default-scheduler"}}},"status":{"latestVersion":1,"observedGeneration":1,"replicas":0,"updatedReplicas":0,"availableReplicas":0,"unavailableReplicas":0,"details":{"message":"config change","causes":[{"type":"ConfigChange"}]},"conditions":[{"type":"Available","status":"False","lastUpdateTime":"2019-10-09T10:46:56Z","lastTransitionTime":"2019-10-09T10:46:56Z","message":"Deployment config does not have minimum availability."}]}}
+    creationTimestamp: 2019-10-09T10:46:58Z
+    generation: 4
+    labels:
+      app: postgresql-persistent
+      openshift.io/deployment-config.name: task-db
+      template: postgresql-persistent-template
+    name: task-db-1
+    namespace: bootcamp
+    ownerReferences:
+    - apiVersion: apps.openshift.io/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: DeploymentConfig
+      name: task-db
+      uid: 1d042edd-ea82-11e9-a2b9-0800276cf440
+    resourceVersion: "949692"
+    selfLink: /api/v1/namespaces/bootcamp/replicationcontrollers/task-db-1
+    uid: 1e1951ae-ea82-11e9-8600-0800276cf440
+  spec:
+    replicas: 1
+    selector:
+      deployment: task-db-1
+      deploymentconfig: task-db
+      name: task-db
+    template:
+      metadata:
+        annotations:
+          openshift.io/deployment-config.latest-version: "1"
+          openshift.io/deployment-config.name: task-db
+          openshift.io/deployment.name: task-db-1
+        creationTimestamp: null
+        labels:
+          deployment: task-db-1
+          deploymentconfig: task-db
+          name: task-db
+      spec:
+        containers:
+        - env:
+          - name: POSTGRESQL_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: task-db
+          - name: POSTGRESQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-password
+                name: task-db
+          - name: POSTGRESQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                key: database-name
+                name: task-db
+          image: 172.30.1.1:5000/openshift/postgresql@sha256:539f3b22082290601cb2d13c3a288d126554a9f3898008dae18af68f4d2cce90
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+              - /usr/libexec/check-container
+              - --live
+            failureThreshold: 3
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          name: postgresql
+          ports:
+          - containerPort: 5432
+            protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+              - /usr/libexec/check-container
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              memory: 512Mi
+          securityContext:
+            capabilities: {}
+            privileged: false
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/lib/pgsql/data
+            name: task-db-data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: task-db-data
+          persistentVolumeClaim:
+            claimName: task-db
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 4
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+      service.alpha.openshift.io/dependencies: '[{"name": "jenkins-jnlp", "namespace":
+        "", "kind": "Service"}]'
+      service.openshift.io/infrastructure: "true"
+    creationTimestamp: 2019-10-09T11:41:27Z
+    labels:
+      app: jenkins-ephemeral
+      template: jenkins-ephemeral-template
+    name: jenkins
+    namespace: bootcamp
+    resourceVersion: "932186"
+    selfLink: /api/v1/namespaces/bootcamp/services/jenkins
+    uid: bad2b12d-ea89-11e9-8600-0800276cf440
+  spec:
+    clusterIP: 172.30.6.209
+    ports:
+    - name: web
+      port: 80
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      name: jenkins
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: 2019-10-09T11:41:27Z
+    labels:
+      app: jenkins-ephemeral
+      template: jenkins-ephemeral-template
+    name: jenkins-jnlp
+    namespace: bootcamp
+    resourceVersion: "932183"
+    selfLink: /api/v1/namespaces/bootcamp/services/jenkins-jnlp
+    uid: bac28fe5-ea89-11e9-8600-0800276cf440
+  spec:
+    clusterIP: 172.30.126.185
+    ports:
+    - name: agent
+      port: 50000
+      protocol: TCP
+      targetPort: 50000
+    selector:
+      name: jenkins
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftWebConsole
+    creationTimestamp: 2019-10-09T10:01:05Z
+    labels:
+      app: mywebserver
+    name: mywebserver
+    namespace: bootcamp
+    resourceVersion: "907598"
+    selfLink: /api/v1/namespaces/bootcamp/services/mywebserver
+    uid: b54efe75-ea7b-11e9-8600-0800276cf440
+  spec:
+    clusterIP: 172.30.53.121
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      deploymentconfig: mywebserver
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: 2019-10-09T12:18:06Z
+    labels:
+      app: task
+    name: task
+    namespace: bootcamp
+    resourceVersion: "941025"
+    selfLink: /api/v1/namespaces/bootcamp/services/task
+    uid: d9ac76c5-ea8e-11e9-8600-0800276cf440
+  spec:
+    clusterIP: 172.30.235.148
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    - name: 9009-tcp
+      port: 9009
+      protocol: TCP
+      targetPort: 9009
+    selector:
+      app: task
+      deploymentconfig: task
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
+    creationTimestamp: 2019-10-09T10:46:56Z
+    labels:
+      app: postgresql-persistent
+      template: postgresql-persistent-template
+    name: task-db
+    namespace: bootcamp
+    resourceVersion: "918903"
+    selfLink: /api/v1/namespaces/bootcamp/services/task-db
+    uid: 1d0babd4-ea82-11e9-8600-0800276cf440
+  spec:
+    clusterIP: 172.30.103.185
+    ports:
+    - name: postgresql
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+    selector:
+      name: task-db
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+      template.alpha.openshift.io/wait-for-ready: "true"
+    creationTimestamp: 2019-10-09T11:41:26Z
+    generation: 2
+    labels:
+      app: jenkins-ephemeral
+      template: jenkins-ephemeral-template
+    name: jenkins
+    namespace: bootcamp
+    resourceVersion: "933890"
+    selfLink: /apis/apps.openshift.io/v1/namespaces/bootcamp/deploymentconfigs/jenkins
+    uid: ba5c70af-ea89-11e9-a2b9-0800276cf440
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      name: jenkins
+    strategy:
+      activeDeadlineSeconds: 21600
+      recreateParams:
+        timeoutSeconds: 600
+      resources: {}
+      type: Recreate
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          name: jenkins
+      spec:
+        containers:
+        - env:
+          - name: OPENSHIFT_ENABLE_OAUTH
+            value: "true"
+          - name: OPENSHIFT_ENABLE_REDIRECT_PROMPT
+            value: "true"
+          - name: DISABLE_ADMINISTRATIVE_MONITORS
+            value: "false"
+          - name: KUBERNETES_MASTER
+            value: https://kubernetes.default:443
+          - name: KUBERNETES_TRUST_CERTIFICATES
+            value: "true"
+          - name: JENKINS_SERVICE_NAME
+            value: jenkins
+          - name: JNLP_SERVICE_NAME
+            value: jenkins-jnlp
+          image: 172.30.1.1:5000/openshift/jenkins@sha256:e2a97ac20f680314f6ea221d33aafa663dbfde1a9cadfe184f22f52abebabb1e
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 2
+            httpGet:
+              path: /login
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 420
+            periodSeconds: 360
+            successThreshold: 1
+            timeoutSeconds: 240
+          name: jenkins
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /login
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 3
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 240
+          resources:
+            limits:
+              memory: 512Mi
+          securityContext:
+            capabilities: {}
+            privileged: false
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/lib/jenkins
+            name: jenkins-data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: jenkins
+        serviceAccountName: jenkins
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: jenkins-data
+    test: false
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - jenkins
+        from:
+          kind: ImageStreamTag
+          name: jenkins:2
+          namespace: openshift
+        lastTriggeredImage: 172.30.1.1:5000/openshift/jenkins@sha256:e2a97ac20f680314f6ea221d33aafa663dbfde1a9cadfe184f22f52abebabb1e
+      type: ImageChange
+    - type: ConfigChange
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: 2019-10-09T11:48:22Z
+      lastUpdateTime: 2019-10-09T11:48:22Z
+      message: Deployment config has minimum availability.
+      status: "True"
+      type: Available
+    - lastTransitionTime: 2019-10-09T11:48:23Z
+      lastUpdateTime: 2019-10-09T11:48:23Z
+      message: replication controller "jenkins-1" successfully rolled out
+      reason: NewReplicationControllerAvailable
+      status: "True"
+      type: Progressing
+    details:
+      causes:
+      - type: ConfigChange
+      message: config change
+    latestVersion: 1
+    observedGeneration: 2
+    readyReplicas: 1
+    replicas: 1
+    unavailableReplicas: 0
+    updatedReplicas: 1
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftWebConsole
+    creationTimestamp: 2019-10-09T10:01:05Z
+    generation: 6
+    labels:
+      app: mywebserver
+    name: mywebserver
+    namespace: bootcamp
+    resourceVersion: "931572"
+    selfLink: /apis/apps.openshift.io/v1/namespaces/bootcamp/deploymentconfigs/mywebserver
+    uid: b551004f-ea7b-11e9-a2b9-0800276cf440
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: mywebserver
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: mywebserver
+          deploymentconfig: mywebserver
+      spec:
+        containers:
+        - image: 172.30.1.1:5000/bootcamp/mywebserver@sha256:469872e623080d01e33b73af9075c356ed0d4800a525ea608ae60c053e5964e1
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /index.html
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: mywebserver
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 8443
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /index.html
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - mywebserver
+        from:
+          kind: ImageStreamTag
+          name: mywebserver:latest
+          namespace: bootcamp
+        lastTriggeredImage: 172.30.1.1:5000/bootcamp/mywebserver@sha256:469872e623080d01e33b73af9075c356ed0d4800a525ea608ae60c053e5964e1
+      type: ImageChange
+    - type: ConfigChange
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: 2019-10-09T10:03:18Z
+      lastUpdateTime: 2019-10-09T10:03:18Z
+      message: Deployment config has minimum availability.
+      status: "True"
+      type: Available
+    - lastTransitionTime: 2019-10-09T11:38:58Z
+      lastUpdateTime: 2019-10-09T11:39:00Z
+      message: replication controller "mywebserver-3" successfully rolled out
+      reason: NewReplicationControllerAvailable
+      status: "True"
+      type: Progressing
+    details:
+      causes:
+      - type: Manual
+      message: manual change
+    latestVersion: 3
+    observedGeneration: 6
+    readyReplicas: 1
+    replicas: 1
+    unavailableReplicas: 0
+    updatedReplicas: 1
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: 2019-10-09T12:18:06Z
+    generation: 9
+    labels:
+      app: task
+    name: task
+    namespace: bootcamp
+    resourceVersion: "952368"
+    selfLink: /apis/apps.openshift.io/v1/namespaces/bootcamp/deploymentconfigs/task
+    uid: d9a374e0-ea8e-11e9-a2b9-0800276cf440
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      app: task
+      deploymentconfig: task
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: task
+          deploymentconfig: task
+      spec:
+        containers:
+        - env:
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: task-db
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-password
+                name: task-db
+          - name: DB_SERVER
+            value: task-db
+          image: 172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /data/hello
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+          name: task
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 9009
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /data/hello
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - task
+        from:
+          kind: ImageStreamTag
+          name: task:latest
+          namespace: bootcamp
+        lastTriggeredImage: 172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13
+      type: ImageChange
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: 2019-10-09T12:18:15Z
+      lastUpdateTime: 2019-10-09T12:18:15Z
+      message: Deployment config has minimum availability.
+      status: "True"
+      type: Available
+    - lastTransitionTime: 2019-10-09T13:03:20Z
+      lastUpdateTime: 2019-10-09T13:03:25Z
+      message: replication controller "task-8" successfully rolled out
+      reason: NewReplicationControllerAvailable
+      status: "True"
+      type: Progressing
+    details:
+      causes:
+      - type: ConfigChange
+      message: config change
+    latestVersion: 8
+    observedGeneration: 9
+    readyReplicas: 1
+    replicas: 1
+    unavailableReplicas: 0
+    updatedReplicas: 1
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      template.alpha.openshift.io/wait-for-ready: "true"
+    creationTimestamp: 2019-10-09T10:46:56Z
+    generation: 4
+    labels:
+      app: postgresql-persistent
+      template: postgresql-persistent-template
+    name: task-db
+    namespace: bootcamp
+    resourceVersion: "949696"
+    selfLink: /apis/apps.openshift.io/v1/namespaces/bootcamp/deploymentconfigs/task-db
+    uid: 1d042edd-ea82-11e9-a2b9-0800276cf440
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      name: task-db
+    strategy:
+      activeDeadlineSeconds: 21600
+      recreateParams:
+        timeoutSeconds: 600
+      resources: {}
+      type: Recreate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          name: task-db
+      spec:
+        containers:
+        - env:
+          - name: POSTGRESQL_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: task-db
+          - name: POSTGRESQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-password
+                name: task-db
+          - name: POSTGRESQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                key: database-name
+                name: task-db
+          image: 172.30.1.1:5000/openshift/postgresql@sha256:539f3b22082290601cb2d13c3a288d126554a9f3898008dae18af68f4d2cce90
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+              - /usr/libexec/check-container
+              - --live
+            failureThreshold: 3
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          name: postgresql
+          ports:
+          - containerPort: 5432
+            protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+              - /usr/libexec/check-container
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              memory: 512Mi
+          securityContext:
+            capabilities: {}
+            privileged: false
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/lib/pgsql/data
+            name: task-db-data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: task-db-data
+          persistentVolumeClaim:
+            claimName: task-db
+    test: false
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - postgresql
+        from:
+          kind: ImageStreamTag
+          name: postgresql:9.6
+          namespace: openshift
+        lastTriggeredImage: 172.30.1.1:5000/openshift/postgresql@sha256:539f3b22082290601cb2d13c3a288d126554a9f3898008dae18af68f4d2cce90
+      type: ImageChange
+    - type: ConfigChange
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: 2019-10-09T10:47:02Z
+      lastUpdateTime: 2019-10-09T10:48:13Z
+      message: replication controller "task-db-1" successfully rolled out
+      reason: NewReplicationControllerAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: 2019-10-09T12:53:00Z
+      lastUpdateTime: 2019-10-09T12:53:00Z
+      message: Deployment config has minimum availability.
+      status: "True"
+      type: Available
+    details:
+      causes:
+      - type: ConfigChange
+      message: config change
+    latestVersion: 1
+    observedGeneration: 4
+    readyReplicas: 1
+    replicas: 1
+    unavailableReplicas: 0
+    updatedReplicas: 1
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftWebConsole
+    creationTimestamp: 2019-10-09T10:01:05Z
+    labels:
+      app: mywebserver
+    name: mywebserver
+    namespace: bootcamp
+    resourceVersion: "907608"
+    selfLink: /apis/build.openshift.io/v1/namespaces/bootcamp/buildconfigs/mywebserver
+    uid: b5531692-ea7b-11e9-a2b9-0800276cf440
+  spec:
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: mywebserver:latest
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      git:
+        ref: master
+        uri: https://github.com/sclorg/nginx-ex.git
+      type: Git
+    strategy:
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          name: nginx:1.12
+          namespace: openshift
+      type: Source
+    triggers:
+    - imageChange:
+        lastTriggeredImageID: 172.30.1.1:5000/openshift/nginx@sha256:1f2438f8879527f541b97fc2451fe50bcb7c810aab096aeeb2f444a3858869ca
+      type: ImageChange
+    - type: ConfigChange
+    - generic:
+        secret: d352bc21a45ef245
+      type: Generic
+    - github:
+        secret: 7c1df47b096c7900
+      type: GitHub
+  status:
+    lastVersion: 1
+- apiVersion: build.openshift.io/v1
+  kind: Build
+  metadata:
+    annotations:
+      openshift.io/build-config.name: mywebserver
+      openshift.io/build.number: "1"
+      openshift.io/build.pod-name: mywebserver-1-build
+    creationTimestamp: 2019-10-09T10:01:06Z
+    labels:
+      app: mywebserver
+      buildconfig: mywebserver
+      openshift.io/build-config.name: mywebserver
+      openshift.io/build.start-policy: Serial
+    name: mywebserver-1
+    namespace: bootcamp
+    ownerReferences:
+    - apiVersion: build.openshift.io/v1
+      controller: true
+      kind: BuildConfig
+      name: mywebserver
+      uid: b5531692-ea7b-11e9-a2b9-0800276cf440
+    resourceVersion: "907878"
+    selfLink: /apis/build.openshift.io/v1/namespaces/bootcamp/builds/mywebserver-1
+    uid: b5f09d53-ea7b-11e9-a2b9-0800276cf440
+  spec:
+    nodeSelector: null
+    output:
+      pushSecret:
+        name: builder-dockercfg-k7rkv
+      to:
+        kind: ImageStreamTag
+        name: mywebserver:latest
+    postCommit: {}
+    resources: {}
+    revision:
+      git:
+        author:
+          email: bparees@users.noreply.github.com
+          name: Ben Parees
+        commit: 72071c2ae923b119f3bd5433b5e5eda840bd8cd6
+        committer:
+          email: noreply@github.com
+          name: GitHub
+        message: 'Merge pull request #5 from sclorg/revert-4-route'
+      type: Git
+    serviceAccount: builder
+    source:
+      git:
+        ref: master
+        uri: https://github.com/sclorg/nginx-ex.git
+      type: Git
+    strategy:
+      sourceStrategy:
+        from:
+          kind: DockerImage
+          name: 172.30.1.1:5000/openshift/nginx@sha256:1f2438f8879527f541b97fc2451fe50bcb7c810aab096aeeb2f444a3858869ca
+        pullSecret:
+          name: builder-dockercfg-k7rkv
+      type: Source
+    triggeredBy:
+    - message: Build configuration change
+  status:
+    completionTimestamp: 2019-10-09T10:02:02Z
+    config:
+      kind: BuildConfig
+      name: mywebserver
+      namespace: bootcamp
+    duration: 55000000000
+    output:
+      to:
+        imageDigest: sha256:469872e623080d01e33b73af9075c356ed0d4800a525ea608ae60c053e5964e1
+    outputDockerImageReference: 172.30.1.1:5000/bootcamp/mywebserver:latest
+    phase: Complete
+    stages:
+    - durationMilliseconds: 1454
+      name: FetchInputs
+      startTime: 2019-10-09T10:01:20Z
+      steps:
+      - durationMilliseconds: 1454
+        name: FetchGitSource
+        startTime: 2019-10-09T10:01:20Z
+    - durationMilliseconds: 291
+      name: CommitContainer
+      startTime: 2019-10-09T10:01:41Z
+      steps:
+      - durationMilliseconds: 291
+        name: CommitContainer
+        startTime: 2019-10-09T10:01:41Z
+    - durationMilliseconds: 1180
+      name: Assemble
+      startTime: 2019-10-09T10:01:40Z
+      steps:
+      - durationMilliseconds: 1180
+        name: AssembleBuildScripts
+        startTime: 2019-10-09T10:01:40Z
+    - durationMilliseconds: 19764
+      name: PushImage
+      startTime: 2019-10-09T10:01:41Z
+      steps:
+      - durationMilliseconds: 19764
+        name: PushImage
+        startTime: 2019-10-09T10:01:41Z
+    startTimestamp: 2019-10-09T10:01:07Z
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftWebConsole
+    creationTimestamp: 2019-10-09T10:01:05Z
+    generation: 1
+    labels:
+      app: mywebserver
+    name: mywebserver
+    namespace: bootcamp
+    resourceVersion: "907856"
+    selfLink: /apis/image.openshift.io/v1/namespaces/bootcamp/imagestreams/mywebserver
+    uid: b54f6081-ea7b-11e9-a2b9-0800276cf440
+  spec:
+    lookupPolicy:
+      local: false
+  status:
+    dockerImageRepository: 172.30.1.1:5000/bootcamp/mywebserver
+    tags:
+    - items:
+      - created: 2019-10-09T10:02:01Z
+        dockerImageReference: 172.30.1.1:5000/bootcamp/mywebserver@sha256:469872e623080d01e33b73af9075c356ed0d4800a525ea608ae60c053e5964e1
+        generation: 1
+        image: sha256:469872e623080d01e33b73af9075c356ed0d4800a525ea608ae60c053e5964e1
+      tag: latest
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: 2019-10-09T11:55:31Z
+    generation: 1
+    name: task
+    namespace: bootcamp
+    resourceVersion: "935583"
+    selfLink: /apis/image.openshift.io/v1/namespaces/bootcamp/imagestreams/task
+    uid: b1a994bf-ea8b-11e9-a2b9-0800276cf440
+  spec:
+    lookupPolicy:
+      local: false
+  status:
+    dockerImageRepository: 172.30.1.1:5000/bootcamp/task
+    tags:
+    - items:
+      - created: 2019-10-09T11:55:31Z
+        dockerImageReference: 172.30.1.1:5000/bootcamp/task@sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13
+        generation: 1
+        image: sha256:38aa7961a5cf00ea6d6f727989de0ee15d2add795e35cd979987234917dcdd13
+      tag: latest
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      haproxy.router.openshift.io/timeout: 4m
+      openshift.io/generated-by: OpenShiftNewApp
+      openshift.io/host.generated: "true"
+      template.openshift.io/expose-uri: http://{.spec.host}{.spec.path}
+    creationTimestamp: 2019-10-09T11:41:26Z
+    labels:
+      app: jenkins-ephemeral
+      template: jenkins-ephemeral-template
+    name: jenkins
+    namespace: bootcamp
+    resourceVersion: "932168"
+    selfLink: /apis/route.openshift.io/v1/namespaces/bootcamp/routes/jenkins
+    uid: ba597854-ea89-11e9-a2b9-0800276cf440
+  spec:
+    host: jenkins-bootcamp.192.168.99.100.nip.io
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
+    to:
+      kind: Service
+      name: jenkins
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: 2019-10-09T11:41:27Z
+        status: "True"
+        type: Admitted
+      host: jenkins-bootcamp.192.168.99.100.nip.io
+      routerName: router
+      wildcardPolicy: None
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftWebConsole
+      openshift.io/host.generated: "true"
+    creationTimestamp: 2019-10-09T10:01:05Z
+    labels:
+      app: mywebserver
+    name: mywebserver
+    namespace: bootcamp
+    resourceVersion: "907607"
+    selfLink: /apis/route.openshift.io/v1/namespaces/bootcamp/routes/mywebserver
+    uid: b54ed168-ea7b-11e9-a2b9-0800276cf440
+  spec:
+    host: mywebserver-bootcamp.192.168.99.100.nip.io
+    port:
+      targetPort: 8080-tcp
+    to:
+      kind: Service
+      name: mywebserver
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: 2019-10-09T10:01:06Z
+        status: "True"
+        type: Admitted
+      host: mywebserver-bootcamp.192.168.99.100.nip.io
+      routerName: router
+      wildcardPolicy: None
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      openshift.io/host.generated: "true"
+    creationTimestamp: 2019-10-09T12:18:29Z
+    labels:
+      app: task
+    name: task
+    namespace: bootcamp
+    resourceVersion: "941160"
+    selfLink: /apis/route.openshift.io/v1/namespaces/bootcamp/routes/task
+    uid: e74264ea-ea8e-11e9-a2b9-0800276cf440
+  spec:
+    host: task-bootcamp.192.168.99.100.nip.io
+    port:
+      targetPort: 8080-tcp
+    to:
+      kind: Service
+      name: task
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: 2019-10-09T12:18:29Z
+        status: "True"
+        type: Admitted
+      host: task-bootcamp.192.168.99.100.nip.io
+      routerName: router
+      wildcardPolicy: None
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""

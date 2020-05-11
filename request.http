@@ -1,0 +1,39 @@
+//@host = 192.168.99.102
+@host = task-bootcamp.172.17.201.158.nip.io
+
+@port = 80
+
+### Load Tasks 
+
+GET http://{{host}}:{{port}}/data/tasks
+
+### Create Tasks 
+
+POST http://{{host}}:{{port}}/data/tasks HTTP/1.1
+content-type: application/json
+
+{
+    "description": "urgent task"
+}
+
+### get a  Task
+@id = 1111
+
+GET http://{{host}}:{{port}}/data/tasks/{{id}}
+
+### Check Health 
+
+GET http://{{host}}:{{port}}/health
+
+### Check Metrics 
+
+GET http://{{host}}:{{port}}/metrics/application
+
+### Produce an exception
+
+POST http://{{host}}:{{port}}/data/tasks HTTP/1.1
+content-type: application/json
+
+{
+    "description": null
+}

@@ -1,0 +1,13 @@
+com\ntt\task\health\DatabaseHealthCheck.class
+com\ntt\task\task\boundary\TaskResource.class
+com\ntt\task\metric\MetricController.class
+com\ntt\task\config\RandomError.class
+com\ntt\task\config\HealthCheckDelay.class
+com\ntt\task\DataSource.class
+com\ntt\task\SampleRestApplication.class
+com\ntt\task\config\ConfigTestController.class
+com\ntt\task\config\MemoryLeakProducer.class
+com\ntt\task\task\entity\Task.class
+com\ntt\task\HelloController.class
+com\ntt\task\config\PercentBasedAction.class
+com\ntt\task\config\RandomDelay.class

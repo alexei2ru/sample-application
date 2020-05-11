@@ -1,0 +1,20 @@
+version: '2.2'
+
+services:
+  task:
+    build: ./task
+    image: ntt/task
+    ports:
+      - 8080:8080
+      - 9009:9009
+    environment:
+      - DB_SERVER=task-db
+      - DB_USER=dbuser
+      - DB_PASSWORD=dbpassword
+    depends_on:
+      - task-db
+  task-db:
+    build: ./task-db
+    image: ntt/task-db
+    ports:
+      - 5432:5432
