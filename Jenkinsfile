@@ -6,13 +6,14 @@ pipeline {
         DOCKER_IMAGE_FILES = "task"
     }
     stages {
-        stage('Build') {
+        dir ('task') {
+        stage('Build Sample App') {
             steps {
                 echo 'Running build automation'
                 sh 'mvn clean package -f ./task/pom.xml'
             }
         }
-        stage('Build Docker Image') {
+        stage('Build Docker Image for Sample App') {
             when {
                 branch 'master'
             }
@@ -51,6 +52,7 @@ pipeline {
                     enableConfigSubstitution: true
                   )
             }
+        }
         }
     }
 }
