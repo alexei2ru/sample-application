@@ -6,11 +6,12 @@ pipeline {
         DOCKER_IMAGE_FILES = "task"
     }
     stages {
-        dir ('task') {
         stage('Build Sample App') {
             steps {
-                echo 'Running build automation'
-                sh 'mvn clean package -f ./task/pom.xml'
+                dir ('task') {
+                    echo 'Running build automation'
+                    sh 'mvn clean package -f ./task/pom.xml'
+                }
             }
         }
         stage('Build Docker Image for Sample App') {
@@ -19,9 +20,11 @@ pipeline {
             }
             steps {
                 script {
-                    app = docker.build(DOCKER_IMAGE_NAME)
-                    app.inside {
-                        sh 'echo Hello, World!'
+                    dir ('task') {
+                        app = docker.build(DOCKER_IMAGE_NAME)
+                        app.inside {
+                            sh 'echo Hello, World!'
+                        }
                     }
                 }
             }
