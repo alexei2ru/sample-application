@@ -10,7 +10,7 @@ pipeline {
             steps {
                 dir ('task') {
                     echo 'Running build automation'
-                    sh 'mvn clean package -f ./task/pom.xml'
+                    sh 'mvn clean package'
                 }
             }
         }
