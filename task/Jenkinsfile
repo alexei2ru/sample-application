@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         //be sure to replace "willbla" with your own Docker Hub username
-        DOCKER_IMAGE_NAME = "alexei2ru/tasksampleapp"
+        DOCKER_IMAGE_NAME = " -t alexei2ru/tasksampleapp -f ./task/Dockerfile"
         DOCKER_IMAGE_FILES = "task"
     }
     stages {
@@ -18,7 +18,7 @@ pipeline {
             }
             steps {
                 script {
-                    app = docker.build("alexei2ru/tasksampleapp","-f ./task/Dockerfile")
+                    app = docker.build(DOCKER_IMAGE_NAME)
                     app.inside {
                         sh 'echo Hello, World!'
                     }
