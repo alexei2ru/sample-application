@@ -19,7 +19,7 @@ pipeline {
             steps {
                 script {
                     dir ('task') {
-                        app = docker.build(DOCKER_IMAGE_NAME)
+                        app = docker.build(DOCKER_IMAGE_APP)
                         app.inside {
                             sh 'echo Hello, APP!'
                         }
