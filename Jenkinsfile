@@ -61,7 +61,7 @@ pipeline {
                 branch 'test_branch'
             }
             steps {
-                 sh 'docker-compose -f docker-compose.yaml up'
+                 step([$class: 'DockerComposeBuilder', dockerComposeFile: 'docker-compose.yml', option: [$class: 'StartService', scale: 1, service: 'taskforce'], useCustomDockerComposeFile: true])
             }
         }
         stage('DeployToProduction') {
