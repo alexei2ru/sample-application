@@ -62,7 +62,6 @@ pipeline {
             }
             steps {
                  sh 'docker-compose -f docker-compose.yaml up'
-                  )
             }
         }
         stage('DeployToProduction') {
