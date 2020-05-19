@@ -51,14 +51,23 @@ pipeline {
                         app.push("${env.BUILD_NUMBER}")
                         app.push("latest")
                         app_db.push("${env.BUILD_NUMBER}")
-                        app_db.push(latest)
+                        app_db.push("latest")
                     }
                 }
             }
         }
+        stage('DeployToTest') {
+            when {
+                branch 'test-branch'
+            }
+            steps {
+                 sh 'docker-compose -f docker-compose.yaml up'
+                  )
+            }
+        }
         stage('DeployToProduction') {
             when {
-                branch 'example'
+                branch 'production'
             }
             steps {
                 input 'Deploy to Production?'
