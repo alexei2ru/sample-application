@@ -5,8 +5,8 @@ services:
     build: ./task
     image: alexei2ru/tasksampleapp
     ports:
-      - 8080:8080
-      - 9009:9009
+      - 18080:8080
+      - 19009:9009
     environment:
       - DB_SERVER=task-db
       - DB_USER=dbuser
@@ -17,4 +17,4 @@ services:
     build: ./task-db
     image: alexei2ru/tasksampleapp
     ports:
-      - 5432:5432
+      - 15432:5432
