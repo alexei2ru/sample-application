@@ -58,7 +58,7 @@ pipeline {
         }
         stage('DeployToTest') {
             when {
-                branch 'test-branch'
+                branch 'test_branch'
             }
             steps {
                  sh 'docker-compose -f docker-compose.yaml up'
