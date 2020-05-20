@@ -74,8 +74,8 @@ pipeline {
                 branch 'test_branch'
             }
             steps {
-                    sh "docker-compose -f docker-compose.yaml down"
-                    sh "docker-compose -f docker-compose.yaml up -d"
+                    sh 'docker-compose -f docker-compose.yaml down'
+                    sh 'docker-compose -f docker-compose.yaml up -d'
             }   
         }
         stage('DeployToProduction') {
