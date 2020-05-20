@@ -5,7 +5,7 @@ services:
     build: ./task
     image: alexei2ru/tasksampleapp
     ports:
-      - 18080:8080
+      - 30080:8080
       - 19009:9009
     environment:
       - DB_SERVER=task-db

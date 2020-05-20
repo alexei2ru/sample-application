@@ -43,15 +43,28 @@ pipeline {
 
         stage('Push Docker Image') {
             when {
+                branch 'test_branch'
+            }
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_login') {
+                        app.push("${env.BUILD_NUMBER}")
+                        app.push("test")
+                        app_db.push("${env.BUILD_NUMBER}")
+                        app_db.push("test")
+                    }
+                }
+            }
+            when {
                 branch 'master'
             }
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_login') {
                         app.push("${env.BUILD_NUMBER}")
-                        app.push("latest")
+                        app.push("prod")
                         app_db.push("${env.BUILD_NUMBER}")
-                        app_db.push("latest")
+                        app_db.push("prod")
                     }
                 }
             }
@@ -61,8 +74,7 @@ pipeline {
                 branch 'test_branch'
             }
             steps {
-                    sh "echo $PATH"
-                    sh "pwd"
+                    sh "docker-compose -f docker-compose.yaml down"
                     sh "docker-compose -f docker-compose.yaml up -d"
             }   
         }
