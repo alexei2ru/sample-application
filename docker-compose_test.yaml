@@ -1,7 +1,7 @@
 version: '2.2'
 
 services:
-  task:
+  task-test:
     build: ./task
     image: alexei2ru/tasksampleapp:test
     ports:
@@ -12,9 +12,11 @@ services:
       - DB_USER=dbuser
       - DB_PASSWORD=dbpassword
     depends_on:
-      - task-db
-  task-db:
+      - task-db-test
+  task-db-test:
     build: ./task-db
     image: alexei2ru/tasksampledb:test
     ports:
       - 15432:5432
+    environment: 
+      - POSTGRES_HOST_AUTH_METHOD=trust
