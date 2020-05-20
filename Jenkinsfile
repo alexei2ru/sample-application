@@ -39,8 +39,6 @@ pipeline {
                 }
             }
         }
-
-
         stage('Push Docker Image') {
             when {
                 branch 'test_branch'
@@ -55,6 +53,8 @@ pipeline {
                     }
                 }
             }
+        }
+        stage('Push Docker Image') {
             when {
                 branch 'master'
             }
