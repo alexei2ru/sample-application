@@ -62,6 +62,7 @@ pipeline {
             }
             steps {
                     sh "echo $PATH"
+                    sh "pwd"
                     sh "docker-compose -f docker-compose.yml up -d"
             }   
         }
