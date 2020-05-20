@@ -4,7 +4,6 @@ pipeline {
         //be sure to replace "willbla" with your own Docker Hub username
         DOCKER_IMAGE_APP = "alexei2ru/tasksampleapp"
         DOCKER_IMAGE_DB = "alexei2ru/tasksampledb"
-        DOCKER_IMAGE_FILES = "task"
     }
     stages {
         stage('Build Sample App') {
@@ -61,8 +60,9 @@ pipeline {
                 branch 'test_branch'
             }
             steps {
-                 step([$class: 'DockerComposeBuilder', dockerComposeFile: 'docker-compose.yml', option: [$class: 'StartAllServices'], useCustomDockerComposeFile: true])
-            }
+                script {
+                    sh "docker-compose -f docker-compose.yml up -d"
+                }
         }
         stage('DeployToProduction') {
             when {
