@@ -15,6 +15,6 @@ services:
       - task-db
   task-db:
     build: ./task-db
-    image: alexei2ru/tasksampleapp
+    image: alexei2ru/tasksampledb
     ports:
       - 15432:5432
