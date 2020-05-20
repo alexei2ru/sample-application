@@ -63,7 +63,7 @@ pipeline {
             steps {
                     sh "echo $PATH"
                     sh "pwd"
-                    sh "docker-compose -f docker-compose.yml up -d"
+                    sh "docker-compose -f docker-compose.yaml up -d"
             }   
         }
         stage('DeployToProduction') {
