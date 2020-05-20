@@ -61,6 +61,7 @@ pipeline {
                 branch 'test_branch'
             }
             steps {
+                    sh "echo $PATH"
                     sh "docker-compose -f docker-compose.yml up -d"
             }   
         }
