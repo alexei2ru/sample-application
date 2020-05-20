@@ -4,7 +4,7 @@ pipeline {
         //be sure to replace "willbla" with your own Docker Hub username
         DOCKER_IMAGE_APP = "alexei2ru/tasksampleapp"
         DOCKER_IMAGE_DB = "alexei2ru/tasksampledb"
-        PATH = "$PATH:/usr/local/bin/docker-compose"
+        PATH = "$PATH:/usr/local/bin"
     }
     stages {
         stage('Build Sample App') {
