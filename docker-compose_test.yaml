@@ -1,0 +1,20 @@
+version: '2.2'
+
+services:
+  task:
+    build: ./task
+    image: alexei2ru/tasksampleapp:test
+    ports:
+      - 30080:8080
+      - 19009:9009
+    environment:
+      - DB_SERVER=task-db
+      - DB_USER=dbuser
+      - DB_PASSWORD=dbpassword
+    depends_on:
+      - task-db
+  task-db:
+    build: ./task-db
+    image: alexei2ru/tasksampledb:test
+    ports:
+      - 15432:5432
