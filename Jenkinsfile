@@ -77,6 +77,7 @@ pipeline {
                     sh 'docker-compose -f docker-compose.yaml down'
                     sh 'docker-compose -f docker-compose.yaml up -d'
                     script {
+                        sleep time: 5, unit: 'SECONDS'
                         def response = sh(script: 'curl http://localhost:30080/data/hello', returnStdout: true) 
                         echo "--------------Response----------" +response
                     }
