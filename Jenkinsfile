@@ -46,10 +46,10 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_login') {
-                        app.push("${env.BUILD_NUMBER}")
                         app.push("test")
-                        app_db.push("${env.BUILD_NUMBER}")
+                        app.push("latest")
                         app_db.push("test")
+                        app_db.push("latest")
                     }
                 }
             }
@@ -61,10 +61,10 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_login') {
-                        app.push("${env.BUILD_NUMBER}")
                         app.push("prod")
-                        app_db.push("${env.BUILD_NUMBER}")
+                        app.push("latest")
                         app_db.push("prod")
+                        app_db.push("latest")
                     }
                 }
             }
@@ -76,7 +76,11 @@ pipeline {
             steps {
                     sh 'docker-compose -f docker-compose.yaml down'
                     sh 'docker-compose -f docker-compose.yaml up -d'
+                    script {
+                        def response = sh 'curl -s http://localhost:30080/tasks'
+                    }
             }   
+
         }
         stage('DeployToProduction') {
             when {
