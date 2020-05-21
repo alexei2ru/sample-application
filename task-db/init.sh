@@ -22,9 +22,9 @@ create table task
 create sequence sq_task_id increment by 5 start with 100;
 
 INSERT INTO public.task (Id, description)
-VALUES  (nextval(sq_task_id), 'Do some shit'),
-        (nextval(sq_task_id), 'Do some shit later'),
-        (nextval(sq_task_id),'Do some more shit')
+VALUES  (nextval('sq_task_id'), 'Do some shit'),
+        (nextval('sq_task_id'), 'Do some shit later'),
+        (nextval('sq_task_id'),'Do some more shit')
 
 
 EOSQL
