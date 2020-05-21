@@ -77,7 +77,7 @@ pipeline {
                     sh 'docker-compose -f docker-compose.yaml down'
                     sh 'docker-compose -f docker-compose.yaml up -d'
                     script {
-                        sleep time: 20, unit: 'SECONDS'
+                        sleep time: 30, unit: 'SECONDS'
                         def response = sh(script: 'curl -s http://alexandruszabo1c.mylabserver.com:30080/data/hello', returnStdout: true) 
                         echo "--------------Response----------" +response
                     }
