@@ -77,7 +77,7 @@ pipeline {
                     sh 'docker-compose -f docker-compose.yaml down'
                     sh 'docker-compose -f docker-compose.yaml up -d'
                     script {
-                        def response = sh 'curl -s http://localhost:30080/data/hello'
+                        def response = sh 'curl -s http://alexandruszabo1c.mylabserver.com:30080/data/hello'
                     }
             }   
 
