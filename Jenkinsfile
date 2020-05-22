@@ -42,7 +42,7 @@ pipeline {
                             }
                         }
                     }
-                }
+                },
                 "buildDBContainer" : {
                     script {
                         dir ('task-db') {
