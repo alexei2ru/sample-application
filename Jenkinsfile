@@ -32,23 +32,24 @@ pipeline {
         }
         stage('Build Docker Image for Sample App') {
             steps {
-                script {
-                    dir ('task') {
-                        app = docker.build(DOCKER_IMAGE_APP)
-                        app.inside {
-                            sh 'echo Hello, APP!'
+                parallel (
+                buildAppContainer:{
+                    script {
+                        dir ('task') {
+                            app = docker.build(DOCKER_IMAGE_APP)
+                            app.inside {
+                                sh 'echo Hello, APP!'
+                            }
                         }
                     }
                 }
-            }
-        }
-        stage('Build DB Docker Image for Sample App') {
-            steps {
-                script {
-                    dir ('task-db') {
-                        app_db = docker.build(DOCKER_IMAGE_DB)
-                        app_db.inside {
-                            sh 'echo Hello, DB!'
+                buildDBContainer: {
+                    script {
+                        dir ('task-db') {
+                            app_db = docker.build(DOCKER_IMAGE_DB)
+                            app_db.inside {
+                                sh 'echo Hello, DB!'
+                            }
                         }
                     }
                 }
