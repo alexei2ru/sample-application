@@ -13,7 +13,7 @@ pipeline {
             artifactNumToKeepStr: '5'
         )
     )
-}
+    }
     agent any
     environment {
         //be sure to replace "willbla" with your own Docker Hub username
@@ -21,7 +21,6 @@ pipeline {
         DOCKER_IMAGE_DB = "alexei2ru/tasksampledb"
         PATH = "$PATH:/usr/local/bin"
     }
-    properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5'))])
     stages {
         stage('Build Sample App') {
             steps {
