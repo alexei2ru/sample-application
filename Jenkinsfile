@@ -33,7 +33,7 @@ pipeline {
         stage('Build Docker Image for Sample App') {
             steps {
                 parallel (
-                buildAppContainer:{
+                "buildAppContainer" : {
                     script {
                         dir ('task') {
                             app = docker.build(DOCKER_IMAGE_APP)
@@ -43,7 +43,7 @@ pipeline {
                         }
                     }
                 }
-                buildDBContainer: {
+                "buildDBContainer" : {
                     script {
                         dir ('task-db') {
                             app_db = docker.build(DOCKER_IMAGE_DB)
