@@ -1,4 +1,19 @@
 pipeline {
+    options {
+
+    buildDiscarder(
+        logRotator(
+            // number of build logs to keep
+            numToKeepStr:'5',
+            // history to keep in days
+            daysToKeepStr: '1000',
+            // artifacts are kept for days
+            artifactDaysToKeepStr: '1000',
+            // number of builds have their artifacts kept
+            artifactNumToKeepStr: '5'
+        )
+    )
+}
     agent any
     environment {
         //be sure to replace "willbla" with your own Docker Hub username
@@ -6,6 +21,7 @@ pipeline {
         DOCKER_IMAGE_DB = "alexei2ru/tasksampledb"
         PATH = "$PATH:/usr/local/bin"
     }
+    properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5'))])
     stages {
         stage('Build Sample App') {
             steps {
