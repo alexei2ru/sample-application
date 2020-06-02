@@ -98,6 +98,12 @@ pipeline {
                         def response = sh(script: 'curl -s http://alexandruszabo1c.mylabserver.com:30080/data/hello', returnStdout: true) 
                         echo "--------------Response----------" +response
                     }
+                    kubernetesDeploy(
+                    kubeconfigId: 'kube_config',
+                    configs: 'task-db-kube.yaml',
+                    enableConfigSubstitution: true
+                  )
+                    
             }   
 
         }
