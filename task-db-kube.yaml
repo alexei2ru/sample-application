@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose_test.yaml
+    kompose.version: 1.19.0 (f63a961c)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: task-db-test
+  name: task-db-test
+spec:
+  ports:
+  - name: "15432"
+    port: 15432
+    targetPort: 5432
+  selector:
+    io.kompose.service: task-db-test
+status:
+  loadBalancer: {}
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose_test.yaml
+    kompose.version: 1.19.0 (f63a961c)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: task-db-test
+  name: task-db-test
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose_test.yaml
+        kompose.version: 1.19.0 (f63a961c)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: task-db-test
+    spec:
+      containers:
+      - env:
+        - name: POSTGRES_HOST_AUTH_METHOD
+          value: trust
+        image: alexei2ru/tasksampledb:test
+        name: task-db-test
+        ports:
+        - containerPort: 5432
+        resources: {}
+      restartPolicy: Always
+status: {}

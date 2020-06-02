@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose_test.yaml
+    kompose.version: 1.19.0 (f63a961c)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: task-test
+  name: task-test
+spec:
+  ports:
+  - name: "30080"
+    port: 30080
+    targetPort: 8080
+  - name: "19009"
+    port: 19009
+    targetPort: 9009
+  selector:
+    io.kompose.service: task-test
+status:
+  loadBalancer: {}
+
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose_test.yaml
+    kompose.version: 1.19.0 (f63a961c)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: task-test
+  name: task-test
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose_test.yaml
+        kompose.version: 1.19.0 (f63a961c)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: task-test
+    spec:
+      containers:
+      - env:
+        - name: DB_PASSWORD
+          value: dbpassword
+        - name: DB_SERVER
+          value: task-db
+        - name: DB_USER
+          value: dbuser
+        image: alexei2ru/tasksampleapp:test
+        name: task-test
+        ports:
+        - containerPort: 8080
+        - containerPort: 9009
+        resources: {}
+      restartPolicy: Always
+status: {}
