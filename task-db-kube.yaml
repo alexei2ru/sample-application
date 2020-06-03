@@ -1,19 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    kompose.cmd: kompose convert -f docker-compose_test.yaml
-    kompose.version: 1.19.0 (f63a961c)
-  labels:
-    io.kompose.service: task-db-test
-  name: task-db-test
+  name: task-db-service
 spec:
   ports:
-  - name: "15432"
     port: 15432
     targetPort: 5432
   selector:
-    io.kompose.service: task-db-test
+    app: task-db
 status:
   loadBalancer: {}
 
@@ -22,23 +16,18 @@ status:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert -f docker-compose_test.yaml
-    kompose.version: 1.19.0 (f63a961c)
+  name: task-db-deployment
   labels:
-    io.kompose.service: task-db-test
-  name: task-db-test
+    app: task-db
 spec:
   replicas: 1
-  strategy: {}
+  selector:
+    matchlabels:
+      app: task-db
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert -f docker-compose_test.yaml
-        kompose.version: 1.19.0 (f63a961c)
-      creationTimestamp: null
       labels:
-        io.kompose.service: task-db-test
+        app: task-db
     spec:
       containers:
       - env:
@@ -50,4 +39,3 @@ spec:
         - containerPort: 5432
         resources: {}
       restartPolicy: Always
-status: {}
