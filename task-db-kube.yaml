@@ -4,7 +4,6 @@ metadata:
   annotations:
     kompose.cmd: kompose convert -f docker-compose_test.yaml
     kompose.version: 1.19.0 (f63a961c)
-  creationTimestamp: null
   labels:
     io.kompose.service: task-db-test
   name: task-db-test
@@ -26,7 +25,6 @@ metadata:
   annotations:
     kompose.cmd: kompose convert -f docker-compose_test.yaml
     kompose.version: 1.19.0 (f63a961c)
-  creationTimestamp: null
   labels:
     io.kompose.service: task-db-test
   name: task-db-test
