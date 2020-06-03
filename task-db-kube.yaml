@@ -36,5 +36,4 @@ spec:
         name: task-db-test
         ports:
         - containerPort: 5432
-        resources: {}
       restartPolicy: Always
