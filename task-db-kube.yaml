@@ -29,7 +29,7 @@ spec:
         app: task-db
     spec:
       containers:
-      - name: task-db-test
+      - name: task-db
         image: alexei2ru/tasksampledb:test
         ports:
         - containerPort: 5432
