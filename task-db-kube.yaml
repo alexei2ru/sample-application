@@ -21,7 +21,7 @@ metadata:
 spec:
   replicas: 1
   selector:
-    matchlabels:
+    matchLabels:
       app: task-db
   template:
     metadata:
