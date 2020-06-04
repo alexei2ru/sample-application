@@ -9,8 +9,6 @@ spec:
     - protocol: TCP
       port: 15432
       nodePort: 5432
-  status:
-    loadBalancer: {}
 
 ---
 
@@ -39,4 +37,3 @@ spec:
         - name: POSTGRES_HOST_AUTH_METHOD
           value: trust
       restartPolicy: Always
-    resources: {}
