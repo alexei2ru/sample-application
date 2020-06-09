@@ -97,6 +97,9 @@ pipeline {
                         sleep time: 30, unit: 'SECONDS'
                         def response = sh(script: 'curl -s http://alexandruszabo1c.mylabserver.com:30080/data/hello', returnStdout: true) 
                         echo "--------------Response----------" +response
+                        if (response == 'Hello World') {
+                            sh 'docker-compose -f docker-compose.yaml down'
+                        }
                     }
                     kubernetesDeploy(
                     kubeconfigId: 'kube_config',
