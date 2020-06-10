@@ -105,13 +105,7 @@ pipeline {
                     kubeconfigId: 'kube_config',
                     configs: 'task-db-kube.yaml',
                     enableConfigSubstitution: true
-                    )
-                    kubernetesDeploy(
-                    kubeconfigId: 'kube_config',
-                    configs: 'task-kube.yaml',
-                    enableConfigSubstitution: true
-                  )
-                    
+                    )        
             }   
 
         }
