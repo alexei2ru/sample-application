@@ -7,7 +7,7 @@ spec:
   ports:
     - protocol: TCP
       port: 5432
-      nodePort: 5432
+      nodePort: 31432
       targetPort: 5432
   selector:
     app: task-db
