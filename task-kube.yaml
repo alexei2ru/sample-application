@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: task-test
+  name: task-app-service
 spec:
   type: NodePort
   ports:
@@ -10,25 +10,25 @@ spec:
     nodePort: 30080
     targetPort: 8080
   selector:
-    app: task
+    app: task-app
 
 ---
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: task-deployment
+  name: task-app-deployment
   labels:
-    app: task
+    app: task-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: task
+      app: task-app
   template:
     metadata:
       labels:
-        app: task
+        app: task-app
     spec:
       containers:
       - env:
@@ -38,7 +38,7 @@ spec:
           value: task-db
         - name: DB_USER
           value: dbuser
-        name: task
+        name: task-app
         image: alexei2ru/tasksampleapp:test
         ports:
         - containerPort: 8080
