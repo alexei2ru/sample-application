@@ -45,6 +45,18 @@ spec:
         ports:
         - containerPort: 8080
         - containerPort: 9009
+        readinessProbe:
+            httpGet:
+                path: /health
+                port: 8080
+            initialDelaySeconds: 30
+          livenessProbe:
+            httpGet:
+                path: /health
+                port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 2
+            failureThreshold: 20
       restartPolicy: Always
 status: {}
 
