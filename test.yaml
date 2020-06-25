@@ -1,0 +1,111 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-app
+  labels:
+    name: test-app
+spec:
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 8080
+    nodePort: 30080
+    targetPort: 8080
+  selector:
+    name: test-app
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-app-deployment
+  labels:
+    name: test-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: test-app
+  template:
+    metadata:
+      labels:
+        name: test-app
+    spec:
+      containers:
+      - env:
+        - name: DB_PASSWORD
+          value: dbpassword
+        - name: DB_SERVER
+          value: test-db
+        - name: DB_USER
+          value: dbuser
+        name: test-app
+        image: alexei2ru/tasksampleapp:test
+        ports:
+        - containerPort: 8080
+        - containerPort: 9009
+      restartPolicy: Always
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-db
+  labels:
+    name: test-db
+spec:
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 5432
+    nodePort: 31432
+    targetPort: 5432
+  selector:
+    name: test-db
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-deployment
+  labels:
+    name: test-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: test-db
+  template:
+    metadata:
+      labels:
+        name: test-db
+    spec:
+      containers:
+      - name: test-db
+        image: alexei2ru/tasksampledb:test
+        volumeMounts:
+          - name: postgres-data
+            mountPath: /var/lib/postgresql/data
+        ports:
+          - containerPort: 5432
+        env:
+          - name: POSTGRES_HOST_AUTH_METHOD
+            value: trust
+        readinessProbe:
+          exec:
+            command: ["psql", "-w", "-U", "postgres", "-d", "tasks", "-c", "SELECT 1"]
+          initialDelaySeconds: 15
+          timeoutSeconds: 2
+        livenessProbe:
+          exec:
+            command: ["psql", "-w", "-U", "postgres", "-d", "tasks", "-c", "SELECT 1"]
+          initialDelaySeconds: 45
+          timeoutSeconds: 2
+        volumes:
+          - name: postgres-data
+            persistentVolumeClaim:
+            claimName: postgres-pvc
