@@ -105,7 +105,7 @@ spec:
             command: ["psql", "-w", "-U", "postgres", "-d", "tasks", "-c", "SELECT 1"]
           initialDelaySeconds: 45
           timeoutSeconds: 2
-        volumes:
-          - name: postgres-data
-            persistentVolumeClaim:
-            claimName: postgres-pvc
+      volumes:
+        - name: postgres-data
+          persistentVolumeClaim:
+          claimName: postgres-pvc
